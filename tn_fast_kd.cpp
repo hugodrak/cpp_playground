@@ -144,30 +144,65 @@ std::vector<int> regionQuery(const PointCloud<float>& cloud, my_kd_tree_t& index
 
     return ret_matches;
 }
+	// original
+	void expandCluster(const PointCloud<float>& cloud, my_kd_tree_t& index, std::vector<int>& labels, size_t pointIdx, int clusterId, float squaredEpsilon, int minPts) {
+		std::vector<int> searchQueue = regionQuery(cloud, index, cloud.pts[pointIdx], squaredEpsilon);
 
-void expandCluster(const PointCloud<float>& cloud, my_kd_tree_t& index, std::vector<int>& labels, size_t pointIdx, int clusterId, float squaredEpsilon, int minPts) {
-    std::vector<int> searchQueue = regionQuery(cloud, index, cloud.pts[pointIdx], squaredEpsilon);
+		size_t i = 0;
+		while (i < searchQueue.size()) {
+			size_t idx = searchQueue[i++];  // Use 'idx' to refer to the current point index in searchQueue
+			if (labels[idx] == 0) {
+				labels[idx] = clusterId;
+				std::vector<int> pointNeighbors = regionQuery(cloud, index, cloud.pts[idx], squaredEpsilon);
+				if (pointNeighbors.size() >= minPts) {
+					// Insert new neighbors at the end of the search queue
+					// Avoid inserting points that are already in the queue
+					for (int neighborIdx : pointNeighbors) {
+						if (labels[neighborIdx] == 0) {
+							searchQueue.push_back(neighborIdx);
+						}
+					}
+				}
+			} else if (labels[idx] == -1) {
+				labels[idx] = clusterId;
+			}
+		}
+	}
+	// NOTE: this was worse than the original
+	// void expandCluster(const PointCloud<float>& cloud, my_kd_tree_t& index, std::vector<int>& labels, size_t pointIdx, int clusterId, float squaredEpsilon, int minPts) {
+	// 	std::vector<int> searchQueue = {static_cast<int>(pointIdx)}; // Start with the initial point
+	// 	std::vector<bool> visited(cloud.pts.size(), false); // Track whether points have been visited
 
-    size_t i = 0;
-    while (i < searchQueue.size()) {
-        size_t idx = searchQueue[i++];  // Use 'idx' to refer to the current point index in searchQueue
-        if (labels[idx] == 0) {
-            labels[idx] = clusterId;
-            std::vector<int> pointNeighbors = regionQuery(cloud, index, cloud.pts[idx], squaredEpsilon);
-            if (pointNeighbors.size() >= minPts) {
-                // Insert new neighbors at the end of the search queue
-                // Avoid inserting points that are already in the queue
-                for (int neighborIdx : pointNeighbors) {
-                    if (labels[neighborIdx] == 0) {
-                        searchQueue.push_back(neighborIdx);
-                    }
-                }
-            }
-        } else if (labels[idx] == -1) {
-            labels[idx] = clusterId;
-        }
-    }
-}
+	// 	size_t i = 0;
+	// 	while (i < searchQueue.size()) {
+	// 		int idx = searchQueue[i];  // Current point index in searchQueue
+
+	// 		// Only proceed if this point hasn't been visited yet
+	// 		if (!visited[idx]) {
+	// 			visited[idx] = true; // Mark this point as visited
+
+	// 			std::vector<int> pointNeighbors = regionQuery(cloud, index, cloud.pts[idx], squaredEpsilon);
+
+	// 			// Check if point is a core point
+	// 			if (pointNeighbors.size() >= minPts) {
+	// 				// Add all neighbors to the search queue if they haven't been visited yet
+	// 				for (int neighborIdx : pointNeighbors) {
+	// 					if (!visited[neighborIdx]) {
+	// 						searchQueue.push_back(neighborIdx);
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+
+	// 		// Assign clusterId to the point if it was not yet assigned
+	// 		if (labels[idx] == 0) {
+	// 			labels[idx] = clusterId;
+	// 		}
+
+	// 		++i; // Move to the next point in the queue
+	// 	}
+	// }
+
 
 
 // void dbscan3d(std::vector<point3>& points, float epsilon, int minPts, std::vector<int>& labels) {
@@ -199,10 +234,10 @@ void dbscan3d(std::vector<point3>& originalPoints, float epsilon, int minPts, st
         cloud.pts.push_back({p.x, p.y});
     }
 
-	std::cout << "Cloud size: " << cloud.pts.size() << std::endl;
+	//std::cout << "Cloud size: " << cloud.pts.size() << std::endl;
 
     // Create and build the k-d tree index for the point cloud
-	my_kd_tree_t index(2 /*dim*/, cloud, nanoflann::KDTreeSingleIndexAdaptorParams(10 /* max leaf */));
+	my_kd_tree_t index(2 /*dim*/, cloud, nanoflann::KDTreeSingleIndexAdaptorParams(10 /* max leaf */)); // orig 10
     index.buildIndex();
 
     // DBSCAN algorithm adapted for use with k-d tree
@@ -233,7 +268,7 @@ void createObjects(std::vector<point3>& points, std::vector<int>& labels, int un
 	// todo handle no detections
 	for (int i=1; i <= unique_labels; i++) {
 		TrackedObject obj;
-		float x, y, z = 0;
+		float x, y = 0;
 		float min_x, min_y, max_x, max_y = 0;
 		for (int pi=0; pi < points.size(); pi++) {
 			int lbl = labels[pi];
@@ -242,7 +277,6 @@ void createObjects(std::vector<point3>& points, std::vector<int>& labels, int un
 				obj.numpoints++;
 				x = points[pi].x;
 				y = points[pi].y;
-				//z = points[pi].z;
 
 				// Update min and max x and y values
 				min_x = std::min(obj.tlx, x);
