@@ -2,3 +2,6 @@ cv2_images/*
 logs/*
 out/*
 5-2/*
+*.png
+*.csv
+*.pyc

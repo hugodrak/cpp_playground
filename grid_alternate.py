@@ -13,10 +13,14 @@ np.random.seed(0)
 
 df = pd.read_csv('/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/logs/rosbag2_2024_02_16-14_54_56.csv')
 df = df[(df['time'] >= 34) & (df['time'] < 35)] #
+#df = df[(df['x'] >= -9.3) & (df['x'] < 1.9) & (df['y'] >= 20.4) & (df['y'] < 35.2)] #
 # df = df.sample(n=1000)
 df.reset_index(drop=True, inplace=True)
 
 print(df)
+
+
+# TODO: add min points per cluster
 
 # df = df[(df['x'] > -5.6) & (df['x'] < 1.9) & (df['y'] > 1.9) & (df['y'] < 16.7)]
 
@@ -25,23 +29,26 @@ r = 50  # Range for x and y
 #D = 10  # Distance threshold for merging clusters
 n = 27  # Grid size (number of divisions along x and y axes)
 c = 0.1 # center box size ratio for setting heaviness
+min_points = 40 # min points per cluster, change based on range
+#D = x_size / (1.5) # must be div by max 2, rn, 75% of box size
+#D = 0.3 # meters, is max separation between clusters
+D = 0.4 # meters, is max separation between clusters, i think this should be range independent
+print("D:", D, "m")
+
 
 # TODO: do n*n for clsuters! so that updated clusters have updated com and redo clustering so not one shot
-
+# todo: add doppler data when doing bounding boxes
 # Check n is odd
 if n % 2 != 1:
 	raise ValueError('n must be an odd number')
 
 
-
+plt.figure(figsize=(10, 10))
 # Determine grid cell size
 x_min, x_max, y_min, y_max = -r, r, -r, r
 x_size = (x_max - x_min) / n
 y_size = (y_max - y_min) / n
 
-#D = x_size / (1.5) # must be div by max 2, rn, 75% of box size
-D = 0.3 # meters, is max separation between clusters
-print("D:", D, "m")
 
 # Assign points to grid cells
 df['x_idx'] = ((df['x'] - x_min) / x_size).astype(int)
@@ -55,6 +62,7 @@ clusters_df = pd.DataFrame(columns=['cluster_id', 'mass_center_x', 'mass_center_
 
 # Assign cluster IDs and calculate centers of mass
 for cluster_id, cluster_indices in enumerate(initial_clusters):
+	# print("cluster id:", cluster_id, "contains", len(cluster_indices), "points")
 	cluster_points = df.loc[cluster_indices]
 
 	x_idx = cluster_points['x_idx'].iloc[0]
@@ -94,31 +102,31 @@ clusters_df['x_idx'] = clusters_df['x_idx'].astype(int)
 clusters_df['y_idx'] = clusters_df['y_idx'].astype(int)
 
 df['cluster_id'] = df['cluster_id'].astype(int)
-print(clusters_df)
 
 
 
 
-fig, axs = plt.subplots(1,2, figsize=(12, 12))
+# fig, axs = plt.subplots(1,2, figsize=(12, 12))
 x_ticks = np.linspace(x_min, x_max, n + 1)
 y_ticks = np.linspace(y_min, y_max, n + 1)
 
-axs[0].set_xticks(x_ticks)
-axs[0].set_yticks(y_ticks)
-axs[0].grid(True, linestyle='--', linewidth=0.5, color='gray')
+plt.xticks(x_ticks)
+plt.yticks(y_ticks)
+plt.grid(True, linestyle='--', linewidth=0.5, color='gray')
 # Plot 1: Grid-based Clustering without Merged Clusters
-axs[0].scatter(df['x'], df['y'], c=df['cluster_id'], cmap='turbo', s=0.5)
+# plt.scatter(df['x'], df['y'], c=df['cluster_id'], cmap='turbo', s=0.5)
+plt.scatter(df['x'], df['y'], color='black', s=0.5)
 # for _, row in clusters_df.iterrows():
-#     axs[0].scatter(row['mass_center_x'], row['mass_center_y'], c='red', marker='x')  # Marking the centers
-#     #axs[0].text(row['box_centre_x'], row['box_centre_y'], row['cluster_id'], fontsize=9, color='black', ha='center', va='center')
+#     plt.scatter(row['mass_center_x'], row['mass_center_y'], c='red', marker='x')  # Marking the centers
+#     #plt.text(row['box_centre_x'], row['box_centre_y'], row['cluster_id'], fontsize=9, color='black', ha='center', va='center')
 
-axs[0].set_title('Grid-based Clustering without Merged Clusters')
-axs[0].set_xlabel('X axis')
-axs[0].set_ylabel('Y axis')
-# axs[0].set_xlim(-10, 10)
-# axs[0].set_ylim(-2, 18)
-axs[0].set_xlim(-r, r)
-axs[0].set_ylim(-r, r)
+plt.title('Grid-based Clustering without Merged Clusters')
+plt.xlabel('X axis')
+plt.ylabel('Y axis')
+# plt.set_xlim(-10, 10)
+# plt.set_ylim(-2, 18)
+plt.xlim(-r, r)
+plt.ylim(-r, r)
 
 
 def merge_clusters(clusters_df, current_id, D, matchid, notcheck=[]):
@@ -217,6 +225,10 @@ for i, id in enumerate(unique_merged_ids):
 	new_clusters = clusters_df[clusters_df['matched_id'] == id]
 	box_count = len(new_clusters)
 	total_mass = new_clusters['point_count'].sum()
+
+	if total_mass < min_points:
+		continue
+
 	centre_x = (new_clusters['mass_center_x'] * new_clusters['point_count']).sum() / total_mass
 	centre_y = (new_clusters['mass_center_y'] * new_clusters['point_count']).sum() / total_mass
 	max_x = new_clusters['max_x'].max()
@@ -271,12 +283,18 @@ for i, id in enumerate(unique_merged_ids):
 # axs[1].set_xlim(-r, r)
 # axs[1].set_ylim(-r, r)
 
-axs[0].scatter(mc_df['mass_center_x'], mc_df['mass_center_y'], c=mc_df['id'], cmap='turbo', alpha=0.6, edgecolors='k')  # Marking the centers
+
+
+#plt.scatter(mc_df['mass_center_x'], mc_df['mass_center_y'], c=mc_df['id'], cmap='turbo', alpha=0.6, edgecolors='k')  # Marking the centers
+
 for _, row in mc_df.iterrows():
 	# axs[2].text(row['box_centre_x'], row['box_centre_y'], row['id'], fontsize=9, color='black', ha='center', va='center')
 	# Draw bounding box
+	print("cluster id:", row['id'], "contains", row['point_count'], "points")
+
+	plt.text(row['mass_center_x'], row['mass_center_y'], row['id'], fontsize=9, color='black', ha='center', va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.2'))  # Marking the centers
 	rect = patches.Rectangle((row['min_x'], row['min_y']), row['max_x'] - row['min_x'], row['max_y'] - row['min_y'], linewidth=1, edgecolor='r', facecolor='none')
-	axs[0].add_patch(rect)
+	plt.gca().add_patch(rect)
 
 
 # axs[2].set_title('Grid-based Clustering with Merged Clusters')

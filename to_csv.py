@@ -20,16 +20,16 @@ float32[] ranges
 uint8[] intensities
 bool doppler_active
 uint8[] doppler_returns
-	"""
+"""
 
 TOPIC = "/radar_driver/RadarScanCartesian"
 MSG_TYPE = "radar_msgs/RadarScanCartesian"
 register_types(get_types_from_msg(RADARSPOKE_MSG, MSG_TYPE))
 
-out_folder = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/out"
+out_folder = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/compare/logs"
 
-LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_20-13_11_18"
-# LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_16-14_54_56"
+# LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_20-13_11_18"
+LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_16-14_54_56"
 
 log_folder = os.path.basename(LOGPATH)
 new_dir = os.path.join(out_folder, log_folder)
@@ -59,7 +59,15 @@ def print_meta(reader):
 		print("║"+"   "+t+" "*(w-len(t)-1)+"║")
 	print("╚"+"═"*(w+2)+"╝")
 
-bdf = pd.DataFrame(columns=["time", "x", "y", "intens"])
+# bdf = pd.DataFrame(columns=["time", "x", "y", "intens"])
+dtypes = {
+		'time': 'int32',
+		'x': 'float64',
+		'y': 'float64',
+	}
+
+
+bdf = pd.DataFrame({col: pd.Series(dtype=typ) for col, typ in dtypes.items()})
 
 with AnyReader([Path(LOGPATH)]) as reader:
 	print_meta(reader)
@@ -72,19 +80,21 @@ with AnyReader([Path(LOGPATH)]) as reader:
 		# 	ti += 1
 		# 	continue
 		
-		data = {"time": "", "x": [], "y": [], "intens": []}
-		for x, y, intens in zip(msg.x_indices, msg.y_indices, msg.intensities):
-			data["time"] = ti
-			data["x"].append(x)
-			data["y"].append(y)
-			data["intens"].append(intens)
+		# data = {"time": "", "x": [], "y": [], "intens": []}
+		# # for x, y, intens in zip(msg.x_indices, msg.y_indices, msg.intensities):
+		# for x, y in zip(msg.x_indices, msg.y_indices):
+		# 	data["time"] = ti
+		# 	data["x"].append(x)
+		# 	data["y"].append(y)
+		# 	# data["intens"].append(intens)
+	
+		df = pd.DataFrame({"time": ti, "x": msg.x_indices, "y": msg.y_indices})
+		# df["intens"] /= 255.0
 
-		df = pd.DataFrame(data)
-		df["intens"] /= 255.0
 		ti += 1
 
-		sdf = df.sample(n=N)
+		# sdf = df.sample(n=N)
 
-		bdf = pd.concat([bdf, sdf])
+		bdf = pd.concat([bdf, df])
 
 	bdf.to_csv(f"logs/{log_folder}.csv", index=False)
