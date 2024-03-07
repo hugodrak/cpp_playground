@@ -98,8 +98,8 @@ class Plotter:
 					    va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.2'))
 			# Add the cluster labels to the dataframe
 			for _, row in clusters.iterrows():
-				axs[i].text(row['mass_center_x'], row['mass_center_y'], int(row['id']), fontsize=9, color='black', ha='center',
-							va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.2'))
+				axs[i].text(row['mass_center_x'], row['mass_center_y'], int(row['id']), fontsize=7, color='black', ha='center',
+							va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.1'))
 				# Draw bounding box
 				rect = patches.Rectangle((row['min_x'], row['min_y']), row['max_x'] - row['min_x'],
 										 row['max_y'] - row['min_y'], linewidth=1, edgecolor='r', facecolor='none')

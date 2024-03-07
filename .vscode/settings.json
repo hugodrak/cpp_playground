@@ -77,7 +77,11 @@
 		"format": "cpp",
 		"stop_token": "cpp",
 		"cinttypes": "cpp",
-		"deque": "cpp"
+		"deque": "cpp",
+		"complex": "cpp",
+		"queue": "cpp",
+		"semaphore": "cpp",
+		"stack": "cpp"
 	},
 	"python.analysis.typeCheckingMode": "basic"
 }

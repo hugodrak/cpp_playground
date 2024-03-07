@@ -16,6 +16,7 @@ class GridScanDF:
 		self.c = c # center box size ratio for setting heaviness
 		self.d = d # meters, is max separation between clusters, i think this should be range independent
 		self.mp = min_points # minimum number of points in a cluster
+		self.edge_limit = 0.5 # the limit of where points can be from center to set eg points_left to TRUE
 
 		# Determine grid cell size
 		self.x_min = -self.r
@@ -170,12 +171,17 @@ class GridScanDF:
 			min_y = cluster_points['y'].min()
 
 
+			# do calcuations to see if there exists points in the borders
+			points_right = (cluster_points['x'] > (box_centre_x + self.x_size/2*self.edge_limit)).any()
+			points_left = (cluster_points['x'] < (box_centre_x - self.x_size/2*self.edge_limit)).any()
+			points_top = (cluster_points['y'] > (box_centre_y + self.y_size/2*self.edge_limit)).any()
+			points_bottom = (cluster_points['y'] < (box_centre_y - self.y_size/2*self.edge_limit)).any()
 
 			# add heavines bool
-			right_heavy = (mass_center_x > box_centre_x+ self.x_size*self.c)
-			left_heavy = (mass_center_x < box_centre_x - self.x_size*self.c)
-			top_heavy = (mass_center_y > box_centre_y + self.y_size*self.c)
-			bottom_heavy = (mass_center_y < box_centre_y - self.y_size*self.c)
+			right_heavy = (mass_center_x > box_centre_x+ self.x_size*self.c) and not points_left # we add a center box to the heaviness
+			left_heavy = (mass_center_x < box_centre_x - self.x_size*self.c) and not points_right
+			top_heavy = (mass_center_y > box_centre_y + self.y_size*self.c) and not points_bottom
+			bottom_heavy = (mass_center_y < box_centre_y - self.y_size*self.c) and not points_top
 
 			new_clust = pd.DataFrame({'cluster_id': [cluster_id], 'matched_id': [None], 'x_idx': [x_idx], 'y_idx': [y_idx], 
 								'mass_center_x': [mass_center_x], 'mass_center_y': [mass_center_y], 'max_x': [max_x], 'min_x': [min_x], 
