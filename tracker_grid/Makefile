@@ -13,7 +13,7 @@ BOOST_FLAGS = -lboost_system
 # Program and data files
 EXECUTABLE = tracker_grid
 SOURCE = tracker_grid.cpp
-INPUT_FILE = multi_data_real.csv
+INPUT_FILE = /Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/logs/log_1.csv
 
 # Build and run targets
 .PHONY: all clean run

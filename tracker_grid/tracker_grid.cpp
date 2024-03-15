@@ -383,7 +383,7 @@ void gridScanHD(std::vector<point3>& points, std::vector<MergedClusterObject>& m
 		}
 
 		// add heaviness bool
-		std::cout << "bid: (" << x_idx << ", " << y_idx << ") massx: " << mass_center_x << " lim: " << (box_centre_x + box_size * c) << " points left: " << points_left << std::endl;
+		// std::cout << "bid: (" << x_idx << ", " << y_idx << ") massx: " << mass_center_x << " lim: " << (box_centre_x + box_size * c) << " points left: " << points_left << std::endl;
 		bool right_heavy = (mass_center_x > (box_centre_x + box_size * 0.5 * c)) && !points_left; // we add a center box to the heaviness
 		bool left_heavy = (mass_center_x < (box_centre_x - box_size * 0.5 * c)) && !points_right;
 		bool top_heavy = (mass_center_y > (box_centre_y + box_size * 0.5 * c)) && !points_bottom;
@@ -520,41 +520,29 @@ void gridScanHD(std::vector<point3>& points, std::vector<MergedClusterObject>& m
  * @param unique_labels The number of unique labels.
  * @param objects The vector of TrackedObject instances to be populated.
  */
-void createObjects(std::vector<point3>& points, std::vector<int>& labels, int unique_labels, std::vector<TrackedObject>& objects, int& maxObjectId, std::priority_queue<int, std::vector<int>, std::greater<int> >& deletedIds, float curr_time) {
+void createTrackedObjects(std::vector<MergedClusterObject>& mcos, std::vector<TrackedObject>& objects, int& maxObjectId, std::priority_queue<int, std::vector<int>, std::greater<int> >& deletedIds, float curr_time) {
 	// todo handle no detections
-	for (int i=1; i <= unique_labels; i++) {
-		TrackedObject obj;
-		float x, y = 0;
-		float min_x, min_y, max_x, max_y = 0;
-		for (size_t pi=0; pi < points.size(); pi++) {
-			int lbl = labels[pi];
-
-			if (i == lbl) { // evaluate this
-				obj.numpoints++;
-				x = points[pi].x;
-				y = points[pi].y;
-				//z = points[pi].z;
-
-				// Update min and max x and y values
-				min_x = std::min(obj.tlx, x);
-				max_x = std::max(obj.brx, x);
-				min_y = std::min(obj.tly, y);
-				max_y = std::max(obj.bry, y);
-
-				// Update the midpoint of obj
-				obj.tlx = min_x;
-				obj.tly = min_y;
-				obj.brx = max_x;
-				obj.bry = max_y;
-			}
+	for (const auto mc: mcos) {
+		if (mc.remove) {
+			continue;
 		}
+		TrackedObject obj;
+		obj.tlx = mc.min_x;
+		obj.tly = mc.max_y;
+		obj.brx = mc.max_x;
+		obj.bry = mc.min_y;
+		obj.numpoints = mc.point_count;
+		obj.score = 0;
+
 		if (obj.numpoints == 0) {
 			continue;
 		}
 
 		obj.time_birth = curr_time;
-		obj.xpos = obj.tlx + (obj.brx - obj.tlx) / 2;
-		obj.ypos = obj.tly + (obj.bry - obj.tly) / 2;
+		// obj.xpos = obj.tlx + (obj.brx - obj.tlx) / 2;
+		// obj.ypos = obj.tly + (obj.bry - obj.tly) / 2;
+		obj.xpos = mc.mass_center_x; // TODO: evaluate if the mass center is better
+		obj.ypos = mc.mass_center_y;
 		obj.area = (obj.brx - obj.tlx) * (obj.bry - obj.tly);
 
 
@@ -562,7 +550,7 @@ void createObjects(std::vector<point3>& points, std::vector<int>& labels, int un
 		// TODO: add possibility to reuse deleted ids
 		if (!deletedIds.empty()) {
 			obj.id = deletedIds.top();
-			std::cout << "Reusing id: " << obj.id << std::endl;
+			// std::cout << "Reusing id: " << obj.id << std::endl;
 			deletedIds.pop();
 		} else {
 			obj.id = maxObjectId++;
@@ -585,13 +573,15 @@ void matchObjects(std::vector<TrackedObject>& allObjects, std::vector<TrackedObj
 	for (TrackedObject& newObj : newObjects) {
 		bool match = false;
 		for (TrackedObject& obj : allObjects) {
-			if ( (newObj.xpos < obj.brx) && (newObj.xpos > obj.tlx) && (newObj.ypos < obj.bry) && (newObj.ypos > obj.tly) ) {
+			float areaDiff = std::abs(newObj.area - obj.area) / newObj.area;
+			if ( (newObj.xpos < obj.brx) && (newObj.xpos > obj.tlx) && (newObj.ypos > obj.bry) && (newObj.ypos < obj.tly) && areaDiff < 0.25) { // area can shrink/grow 25%
 			// float pos_dist = sqrt(pow(newObj.xpos - obj.est_xpos, 2) + pow(newObj.ypos - obj.est_ypos, 2));
 			// if ( pos_dist < 5.0 ) { // if the estimated new position and the current position is less than 3m
 				
-				// std::cout << "matched old: " << obj.id << ", new: " << newObj.id << std::endl;
+				std::cout << "matched old: " << obj.id << ", new: " << newObj.id << std::endl;
 				// center of new is inside old bbox!
 				// TODO: improve this! and do for estimated pos instead
+				// TODO: start with some points to keep tracked object for like 3 sekonds
 				match = true;
 				float dt = newObj.time_birth - obj.last_update;
 
@@ -718,8 +708,8 @@ void printBox(const std::string& message) {
 }
 
 int main(int argc, char* argv[]) {
-    std::string wakeupMessage = "Starting MARV RADAR-Tracker v0.2 ";
-    printBox(wakeupMessage);
+//     std::string wakeupMessage = "Starting MARV RADAR-Tracker v0.2 ";
+//     printBox(wakeupMessage);
 
     if (argc < 2) {
         std::cout << "Usage: ./program_name <input_csv_file>" << std::endl;
@@ -739,8 +729,8 @@ int main(int argc, char* argv[]) {
 
 	//std::ifstream file("log_1.csv");
 	std::ofstream out_file("objects.csv");
-	// out_file << "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry" << std::endl;
-	out_file << "time,id,mcx,mcy,tlx,tly,brx,bry,bcx,bcy,pc,bc" << std::endl;
+	out_file << "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry" << std::endl;
+	// out_file << "time,id,xpos,ypos,tlx,tly,brx,bry,bcx,bcy,pc,bc" << std::endl;
 	std::string line;
 
 	std::vector<std::vector< point3 > > data;
@@ -813,6 +803,8 @@ int main(int argc, char* argv[]) {
 	// todo: configure these
 
 	for (int r=0; r<ti+1; r++) {
+		int total_points = data[r].size();
+		std::cout << "Processing row: " << r << " with " << total_points << " points" << std::endl;
 		// std::cout << "data length: " << data[r].size() << std::endl;
 		if (data[r].size() < 1) {
 			continue;
@@ -829,104 +821,85 @@ int main(int argc, char* argv[]) {
 		std::cout << "CT: " << std::fixed << std::setprecision(4) << duration.count();
 
 		// Process and print label counts, comparing with ground truth
-		std::cout << "Merged clusters: " << mergedClusters[r].size() << std::endl;
+		// std::cout << "Merged clusters: " << mergedClusters[r].size() << std::endl;
 		float current_time = times[r][times.size() - 1];
 
 		// TODO: temp write clusts to csv
-		// out_file << "time,id,mcx,mcy,tlx,tly,brx,bry,bcx,bcy,pc,bc,remove" << std::endl;
-		if (out_file.is_open()) {
-			for (const auto& mc : mergedClusters[r]) {
-				if (mc.remove) {
-					continue;
-				}
-				out_file << std::fixed;				
-				out_file << std::setprecision(5) << current_time << ",";	//xpos	
-				out_file << mc.id << ",";			//id						//
-				out_file << std::setprecision(5) << mc.mass_center_x << ",";	//xpos
-				out_file << std::setprecision(5) << mc.mass_center_y << ",";	//xpos
-				out_file << std::setprecision(5) << mc.min_x << ",";	//tlx = minx
-				out_file << std::setprecision(5) << mc.max_y << ",";	//tly = maxy
-				out_file << std::setprecision(5) << mc.max_x << ",";	//brx = maxx
-				out_file << std::setprecision(5) << mc.min_y << ",";	//bry = miny
-				out_file << std::setprecision(5) << mc.box_centre_x << ",";	//est_velocity
-				out_file << std::setprecision(5) << mc.box_centre_y << ",";	//est_heading
-				out_file << mc.point_count << ",";
-				out_file << mc.box_count << std::endl;
-			}
-		}
-
-
-
-
-		// // int total = 0;
-		// for (size_t i = 0; i < labels[r].size(); ++i) {
-		// 	int label = labels[r][i];
-		// 	labelCount[label]++;
-		// 	// total++;
+		//out_file << "time,id,mcx,mcy,tlx,tly,brx,bry,bcx,bcy,pc,bc,remove" << std::endl;
+		// if (out_file.is_open()) {
+		// 	for (const auto& mc : mergedClusters[r]) {
+		// 		if (mc.remove) {
+		// 			continue;
+		// 		}
+		// 		out_file << std::fixed;				
+		// 		out_file << std::setprecision(5) << current_time << ",";	//xpos	
+		// 		out_file << mc.id << ",";			//id						//
+		// 		out_file << std::setprecision(5) << mc.mass_center_x << ",";	//xpos
+		// 		out_file << std::setprecision(5) << mc.mass_center_y << ",";	//xpos
+		// 		out_file << std::setprecision(5) << mc.min_x << ",";	//tlx = minx
+		// 		out_file << std::setprecision(5) << mc.max_y << ",";	//tly = maxy
+		// 		out_file << std::setprecision(5) << mc.max_x << ",";	//brx = maxx
+		// 		out_file << std::setprecision(5) << mc.min_y << ",";	//bry = miny
+		// 		out_file << std::setprecision(5) << mc.box_centre_x << ",";	//est_velocity
+		// 		out_file << std::setprecision(5) << mc.box_centre_y << ",";	//est_heading
+		// 		out_file << mc.point_count << ",";
+		// 		out_file << mc.box_count << std::endl;
+		// 	}
 		// }
 
-		// // std::cout << "Label Counts:" << labelCount.size() << std::endl;
-		// // for (const auto& pair : labelCount) {
-		// // 	std::cout << "Label " << pair.first << ": " << pair.second << " data points" << std::endl;
-		// // }
+		// TODO: working this far!
 
-
-		// int unique_labels = 0;
-		// if (labelCount.size() > 1) {
-		// 	unique_labels = labelCount.size();
-		// }
-
-		// // -------- boxing -------
+		// -------- boxing -------
 		// float current_time = times[r][times.size() - 1];
-		// // std::cout << "Message Time: " << current_time << std::endl;
-		// std::vector<TrackedObject> newObjects;
-		// createObjects(data[r], labels[r], unique_labels, newObjects, maxObjectId, deletedIds, current_time);
+		// std::cout << "Message Time: " << current_time << std::endl;
+		std::vector<TrackedObject> newObjects;
+		createTrackedObjects(mergedClusters[r], newObjects, maxObjectId, deletedIds, current_time);
 
-		// // std::cout << "ids: "  << objectIds << std::endl;
-		// // std::cout << "Objects: "  << unique_labels << std::endl;
+		// std::cout << "ids: "  << objectIds << std::endl;
+		// std::cout << "Objects: "  << unique_labels << std::endl;
 
-		// // for (int o=0; o<newObjects.size(); o++) {
-		// // 	TrackedObject obj = newObjects[o];
-		// // 	std::cout << "ID: " << obj.id << " pts: " << obj.numpoints << " x: " << obj.xpos << " y: " << obj.ypos;
-		// // 	std::cout << " tlx: " << obj.tlx << std::endl;
-		// // }
+		// for (int o=0; o<newObjects.size(); o++) {
+		// 	TrackedObject obj = newObjects[o];
+		// 	std::cout << "ID: " << obj.id << " pts: " << obj.numpoints << " x: " << obj.xpos << " y: " << obj.ypos;
+		// 	std::cout << " tlx: " << obj.tlx << std::endl;
+		// }
 
-		// // --------- Matching ----------
-		// matchObjects(allObjects, newObjects, deletedIds);
+		// --------- Matching ----------
+		matchObjects(allObjects, newObjects, deletedIds);
 
-		// auto syst_mend = std::chrono::system_clock::now();
-		// auto duration_2 = std::chrono::duration_cast<std::chrono::duration<double>>(syst_mend - syst_cend);
-		// std::cout << ", MT: " << std::fixed << std::setprecision(4) << duration_2.count() << ", T: " << std::setprecision(4) << current_time << std::endl;
+		auto syst_mend = std::chrono::system_clock::now();
+		auto duration_2 = std::chrono::duration_cast<std::chrono::duration<double>>(syst_mend - syst_cend);
+		std::cout << ", MT: " << std::fixed << std::setprecision(4) << duration_2.count() << ", T: " << std::setprecision(4) << current_time << std::endl;
 
-		// // std::cout << "All objects: " << allObjects.size() << std::endl;
-		// // for (const auto& ao : allObjects) {
-		// // 	std::cout << "ID: " << ao.id << " score: " << ao.score << " Velocity: " << ao.est_vel << " Heading: " << ao.est_heading << std::endl;
-		// // }
-		// // std::cout << "-----------------" << std::endl;
+		// std::cout << "All objects: " << allObjects.size() << std::endl;
+		// for (const auto& ao : allObjects) {
+		// 	std::cout << "ID: " << ao.id << " score: " << ao.score << " Velocity: " << ao.est_vel << " Heading: " << ao.est_heading << std::endl;
+		// }
+		// std::cout << "-----------------" << std::endl;
 
 		// // TODO: reuse ids
 
-		// // "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry"
-		// if (out_file.is_open()) {
-		// 	for (const auto& ao : allObjects) {
-		// 		out_file << current_time << ","; 	//time
-		// 		out_file << ao.id << ",";			//id
-		// 		out_file << ao.score << ",";		//score
-		// 		out_file << ao.status << ",";		//status
-		// 		out_file << ao.classification << ",";	//classification
-		// 		out_file << std::fixed;								//
-		// 		out_file << std::setprecision(5) << ao.xpos << ",";	//xpos
-		// 		out_file << std::setprecision(5) << ao.ypos << ",";	//ypos
-		// 		out_file << std::setprecision(5) << ao.age << ",";	//age
-		// 		out_file << std::setprecision(5) << ao.est_vel << ",";	//est_velocity
-		// 		out_file << std::setprecision(5) << ao.est_heading << ",";	//est_heading
-		// 		out_file << std::setprecision(5) << ao.tlx << ",";			//tlx
-		// 		out_file << std::setprecision(5) << ao.tly << ",";			//tly
-		// 		out_file << std::setprecision(5) << ao.brx << ",";			//brx
-		// 		out_file << std::setprecision(5) << ao.bry << std::endl;	//bry
-		// 		// out_file << current_time << "," << ao.id << "," << ao.score << "," << ao.est_vel << "," << ao.est_heading << "\n";
-		// 	}
-		// }
+		// "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry"
+		if (out_file.is_open()) {
+			for (const auto& ao : allObjects) {
+				out_file << current_time << ","; 	//time
+				out_file << ao.id << ",";			//id
+				out_file << ao.score << ",";		//score
+				out_file << ao.status << ",";		//status
+				out_file << ao.classification << ",";	//classification
+				out_file << std::fixed;								//
+				out_file << std::setprecision(5) << ao.xpos << ",";	//xpos
+				out_file << std::setprecision(5) << ao.ypos << ",";	//ypos
+				out_file << std::setprecision(5) << ao.age << ",";	//age
+				out_file << std::setprecision(5) << ao.est_vel << ",";	//est_velocity
+				out_file << std::setprecision(5) << ao.est_heading << ",";	//est_heading
+				out_file << std::setprecision(5) << ao.tlx << ",";			//tlx
+				out_file << std::setprecision(5) << ao.tly << ",";			//tly
+				out_file << std::setprecision(5) << ao.brx << ",";			//brx
+				out_file << std::setprecision(5) << ao.bry << std::endl;	//bry
+				// out_file << current_time << "," << ao.id << "," << ao.score << "," << ao.est_vel << "," << ao.est_heading << "\n";
+			}
+		}
 	}
 	out_file.close();
 	return 0;
