@@ -13,7 +13,7 @@ BOOST_FLAGS = -lboost_system
 # Program and data files
 EXECUTABLE = tracker_grid
 SOURCE = tracker_grid.cpp
-INPUT_FILE = test_data.csv
+INPUT_FILE = multi_data_real.csv
 
 # Build and run targets
 .PHONY: all clean run

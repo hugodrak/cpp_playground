@@ -155,7 +155,7 @@ void createInitialClusters(std::vector<point3>& points, int r, float box_size, s
 // TODO: change current id to uint_32t
 void mergeClusters(std::vector<ClusterObject>& clusters, int current_id, double D, int matchid, int n, std::vector<std::vector<int> >& cluster_grid) {
     ClusterObject& current_cluster = clusters[current_id];
-	std::cout << "current_id: " << current_id << " id: (" << current_cluster.x_idx << ", " << current_cluster.y_idx << ")" << std::endl;
+	// std::cout << "current_id: " << current_id << " id: (" << current_cluster.x_idx << ", " << current_cluster.y_idx << ")" << std::endl;
 	// std::cout << "c_x: " << current_cluster.x_idx << " c_y: " << current_cluster.y_idx << std::endl;
     current_cluster.check = false;
 	int current_x = current_cluster.x_idx;
@@ -174,10 +174,10 @@ void mergeClusters(std::vector<ClusterObject>& clusters, int current_id, double 
 				if (up.matched_id == -1) {
 					if (std::abs(current_cluster.max_y - up.min_y) < D) {
 						if (!up.top_heavy) {
-							std::cout << "Looking UP" << std::endl;
+							// std::cout << "Looking UP" << std::endl;
 							mergeClusters(clusters, up_id, D, matchid, n, cluster_grid);
 							up.matched_id = matchid;
-							std::cout << "current id: " << current_id << " (" <<current_cluster.x_idx << ", " << current_cluster.y_idx << ") matched UP: " << up_id << " " << up.x_idx << ", " << up.y_idx << std::endl;
+							// std::cout << "current id: " << current_id << " (" <<current_cluster.x_idx << ", " << current_cluster.y_idx << ") matched UP: " << up_id << " " << up.x_idx << ", " << up.y_idx << std::endl;
 						}
 					}
 				}
@@ -192,10 +192,10 @@ void mergeClusters(std::vector<ClusterObject>& clusters, int current_id, double 
 			ClusterObject& down = clusters[down_id];
 			if (down.check) {
 				if (down.matched_id == -1) {
-					std::cout << "ys c, down: (" <<  current_cluster.min_y << ", " << down.max_y << ")" << std::endl;
+					// std::cout << "ys c, down: (" <<  current_cluster.min_y << ", " << down.max_y << ")" << std::endl;
 					if (std::abs(current_cluster.min_y - down.max_y) < D) {
 						if (!down.bottom_heavy) {
-							std::cout << "Looking DOWN" << std::endl;
+							// std::cout << "Looking DOWN" << std::endl;
 							mergeClusters(clusters, down_id, D, matchid, n, cluster_grid);
 							down.matched_id = matchid;
 						}
@@ -212,11 +212,11 @@ void mergeClusters(std::vector<ClusterObject>& clusters, int current_id, double 
 			ClusterObject& left = clusters[left_id];
 			if (left.check) {
 				if (left.matched_id == -1) {
-					std::cout << "Current:" << current_cluster.x_idx << ", " << current_cluster.y_idx << " UP: " << left.x_idx << ", " << left.y_idx << std::endl;
-					std::cout << "dist" << std::abs(current_cluster.min_x - left.max_x) << " D: " << D << std::endl;
+					// std::cout << "Current:" << current_cluster.x_idx << ", " << current_cluster.y_idx << " UP: " << left.x_idx << ", " << left.y_idx << std::endl;
+					// std::cout << "dist" << std::abs(current_cluster.min_x - left.max_x) << " D: " << D << std::endl;
 					if (std::abs(current_cluster.min_x - left.max_x) < D) {
 						if (!left.left_heavy) {
-							std::cout << "Looking LEFT" << std::endl;
+							// std::cout << "Looking LEFT" << std::endl;
 							mergeClusters(clusters, left_id, D, matchid, n, cluster_grid);
 							left.matched_id = matchid;
 						}
@@ -233,10 +233,10 @@ void mergeClusters(std::vector<ClusterObject>& clusters, int current_id, double 
 			ClusterObject& right = clusters[right_id];
 			if (right.check) {
 				if (right.matched_id == -1) {
-					std::cout << "xs c, right: (" <<  current_cluster.max_x << ", " << right.min_x << ") D: " << std::abs(current_cluster.max_x - right.min_x) << std::endl;
+					// std::cout << "xs c, right: (" <<  current_cluster.max_x << ", " << right.min_x << ") D: " << std::abs(current_cluster.max_x - right.min_x) << std::endl;
 					if (std::abs(current_cluster.max_x - right.min_x) < D) {
 						if (!right.right_heavy) {
-							std::cout << "Looking RIGHT" << std::endl;
+							// std::cout << "Looking RIGHT" << std::endl;
 							mergeClusters(clusters, right_id, D, matchid, n, cluster_grid);
 							right.matched_id = matchid;
 						}
@@ -335,23 +335,50 @@ void gridScanHD(std::vector<point3>& points, std::vector<MergedClusterObject>& m
 		// std::cout << "max_x: " << max_x << " min_x: " << min_x << " max_y: " << max_y << " min_y: " << min_y << std::endl;
 
 		// do calculations to see if there exist points in the borders
+		bool point_center_vertical = false;
+		bool point_center_horisontal = false;
+		const float top_limit = box_centre_y + box_size / 2 * edge_limit/2;
+		const float bot_limit = box_centre_y - box_size / 2 * edge_limit/2;
+		const float left_limit = box_centre_x - box_size / 2 * edge_limit/2;
+		const float right_limit = box_centre_x + box_size / 2 * edge_limit/2;
+		for (size_t i = 0; i < point_count; ++i) {
+			if (!(point_center_vertical) && (bot_limit < cluster_points[i].y < top_limit)) {
+				point_center_vertical = true;
+				if (point_center_horisontal && point_center_vertical) {
+					break;
+				}
+			}
+			if (!(point_center_horisontal) && (left_limit < cluster_points[i].x < right_limit)) {
+				point_center_horisontal = true;
+				if (point_center_horisontal && point_center_vertical) {
+					break;
+				}
+			}
+		}
+
+		// do calculations to see if there exist points in the borders
 		bool points_right = false;
 		bool points_left = false;
 		bool points_top = false;
 		bool points_bottom = false;
 
 		for (size_t i = 0; i < point_count; ++i) {
-			if (cluster_points[i].x > (box_centre_x + box_size / 2 * edge_limit)) {
-				points_right = true;
+			if (!(point_center_horisontal)) {
+				if (cluster_points[i].x > (box_centre_x + box_size / 2 * edge_limit)) {
+					points_right = true;
+				}
+				if (cluster_points[i].x < (box_centre_x - box_size / 2 * edge_limit)) {
+					points_left = true;
+				}
 			}
-			if (cluster_points[i].x < (box_centre_x - box_size / 2 * edge_limit)) {
-				points_left = true;
-			}
-			if (cluster_points[i].y > (box_centre_y + box_size / 2 * edge_limit)) {
-				points_top = true;
-			}
-			if (cluster_points[i].y < (box_centre_y - box_size / 2 * edge_limit)) {
-				points_bottom = true;
+
+			if (!(point_center_vertical)) {
+				if (cluster_points[i].y > (box_centre_y + box_size / 2 * edge_limit)) {
+					points_top = true;
+				}
+				if (cluster_points[i].y < (box_centre_y - box_size / 2 * edge_limit)) {
+					points_bottom = true;
+				}
 			}
 		}
 
@@ -482,116 +509,7 @@ void gridScanHD(std::vector<point3>& points, std::vector<MergedClusterObject>& m
 	} // now the clusters are created and done!
 
 	// TODO: check remove flag
-
-
-
-
-
-	// std::vector<int> unique_merged_ids;
-	// for (size_t i = 0; i < clusters.size(); ++i) {
-	// 	if (std::find(unique_merged_ids.begin(), unique_merged_ids.end(), clusters[i].matched_id) == unique_merged_ids.end()) {
-	// 		unique_merged_ids.push_back(clusters[i].matched_id);
-	// 	}
-	// }
-
-	// // Plot 2: Grid-based Clustering with Merged Clusters
-	// std::unordered_map<std::string, std::string> dtypes = {
-	// 	{"id", "int32"},
-	// 	{"mass_center_x", "float64"},
-	// 	{"mass_center_y", "float64"},
-	// 	{"max_x", "float64"},
-	// 	{"min_x", "float64"},
-	// 	{"max_y", "float64"},
-	// 	{"min_y", "float64"},
-	// 	{"box_centre_x", "float64"},
-	// 	{"box_centre_y", "float64"},
-	// 	{"point_count", "int32"},
-	// 	{"box_count", "int32"}
-	// };
-
-	// std::unordered_map<std::string, std::vector<std::string>> mc_df;
-	// for (const auto& entry : dtypes) {
-	// 	mc_df[entry.first] = std::vector<std::string>();
-	// }
-
-	// int new_id = 0;
-	// for (size_t i = 0; i < unique_merged_ids.size(); ++i) {
-	// 	int id = unique_merged_ids[i];
-	// 	std::vector<ClusterObject> new_clusters;
-	// 	for (size_t j = 0; j < clusters.size(); ++j) {
-	// 		if (clusters[j].matched_id == id) {
-	// 			new_clusters.push_back(clusters[j]);
-	// 		}
-	// 	}
-	// 	int box_count = new_clusters.size();
-	// 	int total_mass = 0;
-	// 	double centre_x = 0.0;
-	// 	double centre_y = 0.0;
-	// 	double max_x = new_clusters[0].max_x;
-	// 	double min_x = new_clusters[0].min_x;
-	// 	double max_y = new_clusters[0].max_y;
-	// 	double min_y = new_clusters[0].min_y;
-	// 	double box_centre_x = 0.0;
-	// 	double box_centre_y = 0.0;
-
-	// 	for (size_t j = 0; j < new_clusters.size(); ++j) {
-	// 		total_mass += new_clusters[j].point_count;
-	// 		centre_x += new_clusters[j].mass_center_x * new_clusters[j].point_count;
-	// 		centre_y += new_clusters[j].mass_center_y * new_clusters[j].point_count;
-	// 		if (new_clusters[j].max_x > max_x) {
-	// 			max_x = new_clusters[j].max_x;
-	// 		}
-	// 		if (new_clusters[j].min_x < min_x) {
-	// 			min_x = new_clusters[j].min_x;
-	// 		}
-	// 		if (new_clusters[j].max_y > max_y) {
-	// 			max_y = new_clusters[j].max_y;
-	// 		}
-	// 		if (new_clusters[j].min_y < min_y) {
-	// 			min_y = new_clusters[j].min_y;
-	// 		}
-	// 	}
-
-	// 	if (total_mass < minPts) {
-	// 		continue;
-	// 	}
-
-	// 	centre_x /= total_mass;
-	// 	centre_y /= total_mass;
-	// 	box_centre_x = (max_x + min_x) / 2;
-	// 	box_centre_y = (max_y + min_y) / 2;
-
-	// 	mc_df["id"].push_back(std::to_string(new_id));
-	// 	mc_df["mass_center_x"].push_back(std::to_string(centre_x));
-	// 	mc_df["mass_center_y"].push_back(std::to_string(centre_y));
-	// 	mc_df["max_x"].push_back(std::to_string(max_x));
-	// 	mc_df["min_x"].push_back(std::to_string(min_x));
-	// 	mc_df["max_y"].push_back(std::to_string(max_y));
-	// 	mc_df["min_y"].push_back(std::to_string(min_y));
-	// 	mc_df["box_centre_x"].push_back(std::to_string(box_centre_x));
-	// 	mc_df["box_centre_y"].push_back(std::to_string(box_centre_y));
-	// 	mc_df["point_count"].push_back(std::to_string(total_mass));
-	// 	mc_df["box_count"].push_back(std::to_string(box_count));
-
-	// 	new_id++;
-	// }
-
-
 }
-
-	// for (int i = 0; i < initial_clusters.size(); ++i) {
-	// 	std::vector<int>& cluster = initial_clusters[i];
-	// 	if (cluster.size() >= minPts) {
-	// 		clusterId++;
-	// 		for (int j = 0; j < cluster.size(); ++j) {
-	// 			labels[cluster[j]] = clusterId;
-	// 		}
-	// 	}
-	// }
-
-
-
-// }
 
 
 /**
@@ -918,9 +836,9 @@ int main(int argc, char* argv[]) {
 		// out_file << "time,id,mcx,mcy,tlx,tly,brx,bry,bcx,bcy,pc,bc,remove" << std::endl;
 		if (out_file.is_open()) {
 			for (const auto& mc : mergedClusters[r]) {
-				// if (mc.remove) {
-				// 	continue;
-				// }
+				if (mc.remove) {
+					continue;
+				}
 				out_file << std::fixed;				
 				out_file << std::setprecision(5) << current_time << ",";	//xpos	
 				out_file << mc.id << ",";			//id						//
