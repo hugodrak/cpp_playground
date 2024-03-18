@@ -571,10 +571,22 @@ void createTrackedObjects(std::vector<MergedClusterObject>& mcos, std::vector<Tr
  */
 void matchObjects(std::vector<TrackedObject>& allObjects, std::vector<TrackedObject>& newObjects, std::priority_queue<int, std::vector<int>, std::greater<int> >& deletedIds) {
 	for (TrackedObject& newObj : newObjects) {
-		bool match = false;
+		bool match = false; 
 		for (TrackedObject& obj : allObjects) {
-			float areaDiff = std::abs(newObj.area - obj.area) / newObj.area;
-			if ( (newObj.xpos < obj.brx) && (newObj.xpos > obj.tlx) && (newObj.ypos > obj.bry) && (newObj.ypos < obj.tly) && areaDiff < 0.25) { // area can shrink/grow 25%
+			bool insideBBOX = (newObj.xpos < obj.brx) && (newObj.xpos > obj.tlx) && (newObj.ypos > obj.bry) && (newObj.ypos < obj.tly);
+			bool areaDiffCheck = (std::abs(newObj.area - obj.area) / newObj.area) < 0.25;
+			bool massCenterDistSqrdCheck = (std::pow(newObj.xpos - obj.xpos, 2)+std::pow(newObj.ypos - obj.ypos, 2)) < 9.0; // check of masscenter is within 1 meter of last seen, dist squared
+			if (insideBBOX) {
+				std::cout << "MATCH: oldID: " << obj.id << " , newid: " << newObj.id << std::endl;
+				if (!areaDiffCheck) {
+					std::cout << "areaDiffCheck NOT valid: " << std::abs(newObj.area - obj.area) / newObj.area << std::endl;	
+				}
+
+				if (!massCenterDistSqrdCheck) {
+					std::cout << "massCenterDistSqrdCheck NOT valid: " << std::sqrt(std::pow(newObj.xpos - obj.xpos, 2)+std::pow(newObj.ypos - obj.ypos, 2)) << std::endl;	
+				}
+			}
+			if ( insideBBOX && areaDiffCheck && massCenterDistSqrdCheck) { // area can shrink/grow 25%
 			// float pos_dist = sqrt(pow(newObj.xpos - obj.est_xpos, 2) + pow(newObj.ypos - obj.est_ypos, 2));
 			// if ( pos_dist < 5.0 ) { // if the estimated new position and the current position is less than 3m
 				
@@ -665,6 +677,7 @@ void matchObjects(std::vector<TrackedObject>& allObjects, std::vector<TrackedObj
 		// Do for all
 		obj.score -= 5;
 
+		// TODO: question this
 		if ( ((obj.max_score - obj.score) > 5) || (obj.score < 0) ) { // ((obj.max_score - obj.score) > 5) ||
 			obj.status = 2; // deleted
 			to_delete.push_back(current_id);
@@ -687,10 +700,25 @@ void matchObjects(std::vector<TrackedObject>& allObjects, std::vector<TrackedObj
 		current_id++;
 	}
 
-	for (size_t i=0; i < to_delete.size(); i++) {
-		deletedIds.push(allObjects[to_delete[i]].id);
-		allObjects.erase(allObjects.begin() + to_delete[i]);
+	// Sort 'to_delete' in descending order to prevent removing in non valid locations
+	std::sort(to_delete.rbegin(), to_delete.rend());
+
+	// Remove objects in descending order of their indices
+	for (int index : to_delete) {
+		deletedIds.push(allObjects[index].id);
+		allObjects.erase(allObjects.begin() + index);
 	}
+
+	// std::cout << "should delete: " << to_delete.size() << std::endl;
+	// // TODO: this does not work cause the array size shrinks!
+	// for (size_t i=0; i < to_delete.size(); i++) {
+	// 	std::cout << "deleting id: " << allObjects[to_delete[i]].id << std::endl;
+	// 	deletedIds.push(allObjects[to_delete[i]].id);
+	// 	allObjects.erase(allObjects.begin() + to_delete[i]);
+	// 	std::cout << "t1" << std::endl;
+	// }
+	// std::cout << "done matching" << std::endl;
+
 
 
 }
@@ -728,9 +756,10 @@ int main(int argc, char* argv[]) {
 
 
 	//std::ifstream file("log_1.csv");
-	std::ofstream out_file("objects.csv");
-	out_file << "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry" << std::endl;
-	// out_file << "time,id,xpos,ypos,tlx,tly,brx,bry,bcx,bcy,pc,bc" << std::endl;
+	std::ofstream obj_file("objects.csv");
+	std::ofstream clust_file("clusters.csv");
+	obj_file << "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry" << std::endl;
+	clust_file << "time,id,xpos,ypos,tlx,tly,brx,bry,bcx,bcy,pc,bc" << std::endl;
 	std::string line;
 
 	std::vector<std::vector< point3 > > data;
@@ -818,7 +847,7 @@ int main(int argc, char* argv[]) {
 
 		auto syst_cend = std::chrono::system_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(syst_cend - syst_cstart);
-		std::cout << "CT: " << std::fixed << std::setprecision(4) << duration.count();
+		std::cout << "CT: " << std::fixed << std::setprecision(4) << duration.count() << " ms" << std::endl;
 
 		// Process and print label counts, comparing with ground truth
 		// std::cout << "Merged clusters: " << mergedClusters[r].size() << std::endl;
@@ -826,26 +855,26 @@ int main(int argc, char* argv[]) {
 
 		// TODO: temp write clusts to csv
 		//out_file << "time,id,mcx,mcy,tlx,tly,brx,bry,bcx,bcy,pc,bc,remove" << std::endl;
-		// if (out_file.is_open()) {
-		// 	for (const auto& mc : mergedClusters[r]) {
-		// 		if (mc.remove) {
-		// 			continue;
-		// 		}
-		// 		out_file << std::fixed;				
-		// 		out_file << std::setprecision(5) << current_time << ",";	//xpos	
-		// 		out_file << mc.id << ",";			//id						//
-		// 		out_file << std::setprecision(5) << mc.mass_center_x << ",";	//xpos
-		// 		out_file << std::setprecision(5) << mc.mass_center_y << ",";	//xpos
-		// 		out_file << std::setprecision(5) << mc.min_x << ",";	//tlx = minx
-		// 		out_file << std::setprecision(5) << mc.max_y << ",";	//tly = maxy
-		// 		out_file << std::setprecision(5) << mc.max_x << ",";	//brx = maxx
-		// 		out_file << std::setprecision(5) << mc.min_y << ",";	//bry = miny
-		// 		out_file << std::setprecision(5) << mc.box_centre_x << ",";	//est_velocity
-		// 		out_file << std::setprecision(5) << mc.box_centre_y << ",";	//est_heading
-		// 		out_file << mc.point_count << ",";
-		// 		out_file << mc.box_count << std::endl;
-		// 	}
-		// }
+		if (clust_file.is_open()) {
+			for (const auto& mc : mergedClusters[r]) {
+				if (mc.remove) {
+					continue;
+				}
+				clust_file << std::fixed;				
+				clust_file << std::setprecision(5) << current_time << ",";	//xpos	
+				clust_file << mc.id << ",";			//id						//
+				clust_file << std::setprecision(5) << mc.mass_center_x << ",";	//xpos
+				clust_file << std::setprecision(5) << mc.mass_center_y << ",";	//xpos
+				clust_file << std::setprecision(5) << mc.min_x << ",";	//tlx = minx
+				clust_file << std::setprecision(5) << mc.max_y << ",";	//tly = maxy
+				clust_file << std::setprecision(5) << mc.max_x << ",";	//brx = maxx
+				clust_file << std::setprecision(5) << mc.min_y << ",";	//bry = miny
+				clust_file << std::setprecision(5) << mc.box_centre_x << ",";	//est_velocity
+				clust_file << std::setprecision(5) << mc.box_centre_y << ",";	//est_heading
+				clust_file << mc.point_count << ",";
+				clust_file << mc.box_count << std::endl;
+			}
+		}
 
 		// TODO: working this far!
 
@@ -866,10 +895,18 @@ int main(int argc, char* argv[]) {
 
 		// --------- Matching ----------
 		matchObjects(allObjects, newObjects, deletedIds);
+		std::cout << "done matching" << std::endl;
 
-		auto syst_mend = std::chrono::system_clock::now();
-		auto duration_2 = std::chrono::duration_cast<std::chrono::duration<double>>(syst_mend - syst_cend);
-		std::cout << ", MT: " << std::fixed << std::setprecision(4) << duration_2.count() << ", T: " << std::setprecision(4) << current_time << std::endl;
+		std::chrono::time_point<std::chrono::system_clock> syst_mend = std::chrono::system_clock::now();
+		std::chrono::duration<double> duration_2 = std::chrono::duration_cast<std::chrono::duration<double>>(syst_mend - syst_cend);
+
+		std::cout << "MT: " << std::fixed << std::setprecision(4) << duration_2.count() << std::endl;
+
+
+		// auto syst_mend = std::chrono::system_clock::now();
+		// auto duration_2 = std::chrono::duration_cast<std::chrono::duration<double>>(syst_mend - syst_cend);
+
+		// std::cout << ", MT: " << std::fixed << std::setprecision(4) << duration_2.count() << ", T: " << std::setprecision(4) << current_time << std::endl;
 
 		// std::cout << "All objects: " << allObjects.size() << std::endl;
 		// for (const auto& ao : allObjects) {
@@ -880,27 +917,36 @@ int main(int argc, char* argv[]) {
 		// // TODO: reuse ids
 
 		// "time,id,score,status,classification,xpos,ypos,age,est_velocity,est_heading,tlx,tly,brx,bry"
-		if (out_file.is_open()) {
+		if (obj_file.is_open()) {
 			for (const auto& ao : allObjects) {
-				out_file << current_time << ","; 	//time
-				out_file << ao.id << ",";			//id
-				out_file << ao.score << ",";		//score
-				out_file << ao.status << ",";		//status
-				out_file << ao.classification << ",";	//classification
-				out_file << std::fixed;								//
-				out_file << std::setprecision(5) << ao.xpos << ",";	//xpos
-				out_file << std::setprecision(5) << ao.ypos << ",";	//ypos
-				out_file << std::setprecision(5) << ao.age << ",";	//age
-				out_file << std::setprecision(5) << ao.est_vel << ",";	//est_velocity
-				out_file << std::setprecision(5) << ao.est_heading << ",";	//est_heading
-				out_file << std::setprecision(5) << ao.tlx << ",";			//tlx
-				out_file << std::setprecision(5) << ao.tly << ",";			//tly
-				out_file << std::setprecision(5) << ao.brx << ",";			//brx
-				out_file << std::setprecision(5) << ao.bry << std::endl;	//bry
+				obj_file << current_time << ","; 	//time
+				obj_file << ao.id << ",";			//id
+				obj_file << ao.score << ",";		//score
+				obj_file << ao.status << ",";		//status
+				obj_file << ao.classification << ",";	//classification
+				obj_file << std::fixed;								//
+				obj_file << std::setprecision(5) << ao.xpos << ",";	//xpos
+				obj_file << std::setprecision(5) << ao.ypos << ",";	//ypos
+				obj_file << std::setprecision(5) << ao.age << ",";	//age
+				obj_file << std::setprecision(5) << ao.est_vel << ",";	//est_velocity
+				obj_file << std::setprecision(5) << ao.est_heading << ",";	//est_heading
+				obj_file << std::setprecision(5) << ao.tlx << ",";			//tlx
+				obj_file << std::setprecision(5) << ao.tly << ",";			//tly
+				obj_file << std::setprecision(5) << ao.brx << ",";			//brx
+				obj_file << std::setprecision(5) << ao.bry << std::endl;	//bry
 				// out_file << current_time << "," << ao.id << "," << ao.score << "," << ao.est_vel << "," << ao.est_heading << "\n";
 			}
 		}
+
+		
+
+		std::chrono::time_point<std::chrono::system_clock> syst_tend = std::chrono::system_clock::now();
+		std::chrono::duration<double> duration_end = std::chrono::duration_cast<std::chrono::duration<double>>(syst_tend - syst_cstart);
+
+		std::cout << "Total: " << std::fixed << std::setprecision(4) << duration_end.count()*1000 << " ms" << std::endl;
+
 	}
-	out_file.close();
+	obj_file.close();
+	clust_file.close();
 	return 0;
 }
