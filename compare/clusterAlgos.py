@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.cluster import DBSCAN
 
 
-
 class GridScanDF:
 	def __init__(self, n, r, c, d, min_points=1):
 		self.name = "Grid based clustering with merged clusters"

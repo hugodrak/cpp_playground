@@ -13,44 +13,6 @@ from pathlib import Path
 np.random.seed(0)
 
 
-RADARSPOKE_MSG = """
-uint32 detection_range
-uint32 detections
-float32[] x_indices
-float32[] y_indices
-float32[] ranges
-uint8[] intensities
-bool doppler_active
-uint8[] doppler_returns
-"""
-
-TOPIC = "/radar_driver/RadarScanCartesian"
-MSG_TYPE = "radar_msgs/RadarScanCartesian"
-register_types(get_types_from_msg(RADARSPOKE_MSG, MSG_TYPE))
-
-
-def print_meta(reader):
-	swe_tz = 3600000000000
-	dur = str(round(reader.duration*10**(-9), 2))
-	st = pd.to_datetime(reader.start_time+swe_tz, unit='ns').strftime('%H:%M:%S')
-	et = pd.to_datetime(reader.end_time+swe_tz, unit='ns').strftime('%H:%M:%S')
-	mc = str(reader.message_count)
-	topics = sorted([f"{('('+str(v.msgcount)+')').rjust(8)} {k}" for k,v in reader.topics.items()])
-	w = max([len(dur), len(et), len(mc), len(st)]+ [len(t)+3 for t in topics])
-	print("╔"+"═"*(w+2)+"╗")
-	print("║"+" "*((w-6)//2)+"LOG DATA"+" "*((w-5)//2)+"║")
-	print("╠"+"═"*(w+2)+"╣")
-	print("║"+"Duration: "+dur + " s"+" "*(w-len(dur)-10)+"║")
-	print("║"+"Start time: "+st+" "*(w-len(st)-10)+"║")
-	print("║"+"End time: "+et+" "*(w-len(et)-8)+"║")
-	print("║"+"Message count: "+mc+" "*(w-len(mc)-13)+"║")
-	print("║"+"Topics: "+" "*(w-6)+"║")
-	for t in topics:
-		print("║"+"   "+t+" "*(w-len(t)-1)+"║")
-	print("╚"+"═"*(w+2)+"╝")
-
-
-
 class Plotter:
 	def __init__(self, r, gridsize, algos=[], out_dir=None):
 		self.r = r
@@ -77,7 +39,7 @@ class Plotter:
 			axs[i].grid(True, linestyle='--', linewidth=0.5, color='gray')
 			axs[i].set_title(algo.name)
 			axs[i].set_xlabel('X axis')
-			axs[i].set_ylabel('Y axis') 	
+			axs[i].set_ylabel('Y axis')
 			axs[i].set_xlim(-self.r, self.r)
 			axs[i].set_ylim(-self.r, self.r)
 
@@ -142,7 +104,6 @@ def iterate_times(logpath):
 	t = 0
 	print("running reader")
 	with AnyReader([Path(logpath)]) as reader:
-		print_meta(reader)
 		connections = [x for x in reader.connections if x.topic == TOPIC]
 		for connection, timestamp, rawdata in tqdm.tqdm(reader.messages(connections=connections)):
 			msg = reader.deserialize(rawdata, connection.msgtype)
@@ -168,7 +129,7 @@ def single(logpath):
 	d = 0.4  # meters, is max separation between clusters, i think this should be range independent
 	print("D:", d, "m")
 	df = pd.read_csv(logpath)
-	df = df[(df['time'] >= 34) & (df['time'] < 35)]  #
+	#df = df[(df['time'] >= 34) & (df['time'] < 35)]  #
 	print("Number of points:", len(df))
 	# df = df[(df['x'] >= -9.3) & (df['x'] < 1.9) & (df['y'] >= 20.4) & (df['y'] < 35.2)]  #
 	# df = df.sample(n=1000)
@@ -184,7 +145,4 @@ def single(logpath):
 	plotter.plot(df)
 
 if __name__ == '__main__':
-	# single('/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/logs/rosbag2_2024_02_16-14_54_56.csv')
-	# LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_16-14_54_56"
-	LOGPATH = "/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/logs/march/rosbag2_2024_03_05-13_55_47"
-	iterate_times(LOGPATH)
+	single('/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/test_data.csv')

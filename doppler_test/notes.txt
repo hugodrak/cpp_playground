@@ -1,0 +1,52 @@
+
+nibbles:
+doppler 0, off
+f	255
+e	232
+c	204
+9	162
+6	120
+3	78
+0	0
+
+
+doppler 1, both
+f	255
+e	254
+c	204
+9	162
+6	120
+3	78
+0	0
+
+
+doppler 1, approaching
+f	255
+e	232
+c	204
+9	162
+6	120
+3	78
+0	0
+
+
+
+lookup:
+
+normal:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+a
+b
+c
+d
+e
+f

@@ -605,11 +605,19 @@ void matchObjects(std::vector<TrackedObject>& allObjects, std::vector<TrackedObj
 				float dy = newObj.ypos - obj.ypos;
 				float dist = sqrt(dx*dx + dy*dy);
 				float vel = dist / dt;
+				float heading_rad_raw = atan2(dy, dx);
+				float heading_deg = heading_rad_raw * (180.0 / M_PI) + 270.0; //Adjust so that 0 degrees is straight up
+				// Convert to a clockwise system (from a counterclockwise one)
+				// and ensure the degrees are within the range [0, 360)
+				heading_deg = fmod(heading_deg, 360.0);
+				if (heading_deg < 0) {
+					heading_deg += 360.0; // Correct negative values
+				}
 
 
 				// calculate est vel and heading
 				obj.vel[obj.history_index] = vel;
-				obj.heading[obj.history_index] = atan2(dy, dx);
+				obj.heading[obj.history_index] = heading_deg; // returns radians, change to deg and correct spin
 				obj.accell[obj.history_index] = vel / dt;
 
 				float sum_head = 0.0;

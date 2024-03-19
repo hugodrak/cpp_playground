@@ -1,0 +1,1 @@
+g++ -std=c++20 -ofast -pthread -Wall -Wextra -o tn tn_fast_kd.cpp && ./tn logs/rosbag2_2024_02_20-13_11_18.csv
