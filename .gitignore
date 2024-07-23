@@ -1,8 +1,10 @@
 cv2_images/*
 logs/*
-out/*
+out/*.*:wq:wq
 5-2/*
 *.png
 *.csv
 *.pyc
 *.npy
+compare/out/*
+venv/*

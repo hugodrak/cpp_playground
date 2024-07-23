@@ -10,6 +10,8 @@ from rosbags.typesys import Stores, get_types_from_msg, get_typestore
 from rosbags.highlevel import AnyReader
 from pathlib import Path
 from tracker import HDTracker
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
 np.random.seed(0)
 
 
@@ -76,10 +78,13 @@ class Plotter:
 		self.gridsize = gridsize
 		self.subplots = len(algos)
 		self.algos = algos
-		self.trackers = [HDTracker(), HDTracker()]
+		# self.trackers = [HDTracker(), HDTracker()]
+		self.trackers = [HDTracker()]
 		if out_dir and not os.path.exists(out_dir):
 			os.makedirs(out_dir)
 		self.out_dir = out_dir
+		self.norm = Normalize(vmin=0, vmax=255)
+		self.cmap = plt.cm.turbo.reversed()
 
 	def plot(self, points, t="0", timestamp=0):
 		run_tracking = True
@@ -104,6 +109,7 @@ class Plotter:
 			axs[i][0].set_ylim(-self.r, self.r)
 
 			# tracking
+			axs[i][1].set_title("Tracking")
 			axs[i][1].set_xticks(np.round(x_ticks, decimals=1))
 			axs[i][1].set_xticklabels(np.round(x_ticks, decimals=1), rotation=45, ha='right')  # Set x tick labels at 45-degree downward angle
 			axs[i][1].set_yticks(np.round(y_ticks, decimals=1))
@@ -122,8 +128,8 @@ class Plotter:
 			time_diff = str(round(end - start, 2))
 			# print(f'{algo.shortname}: {round(end - start, 2)} s')
 
-			axs[i][0].scatter(points['x'], points['y'], s=0.5, color='black')
-			axs[i][1].scatter(points['x'], points['y'], s=0.5, color='black')
+			axs[i][0].scatter(points['x'], points['y'], s=0.5, c=points['intens'], cmap=self.cmap, norm=self.norm)
+			axs[i][1].scatter(points['x'], points['y'], s=0.5, c=points['intens'], cmap=self.cmap, norm=self.norm)
 
 			axs[i][0].text(1, 1, f"{time_diff} s, {len(clusters)} labels", fontsize=9, transform=axs[i][0].transAxes, 
         				verticalalignment='top', horizontalalignment='right', color='black', ha='center',
@@ -140,6 +146,8 @@ class Plotter:
 
 			# run tracking
 			if run_tracking:
+				if t == "10_14_38":
+					d=0
 				# convert df to class object
 				new_objects = []
 				# clustring done, now convert to obj
@@ -149,7 +157,7 @@ class Plotter:
 				self.trackers[i].create_tracked_object(new_objects, timestamp)
 
 				# upadate object positions
-				# here
+				self.trackers[i].estimate_object_position()
 
 				# then match objects
 				self.trackers[i].match_objects(new_objects)
@@ -164,7 +172,7 @@ class Plotter:
 						# 		va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.1'))
 
 
-						axs[i][1].text(obj.xpos, obj.ypos, str(round(obj.age)), fontsize=7, color='black', ha='center',
+						axs[i][1].text(obj.xpos, obj.ypos, str(obj.id), fontsize=7, color='black', ha='center',
 								va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.1'))
 						
 						edge_color = ["red", "blue", "green"][obj.classification] # red=unclass, blue=stat, green=moving, 
@@ -229,8 +237,8 @@ def iterate_times(logpath):
 	plotter = Plotter(r, gridsize, algos=algos, out_dir=out_dir)
 	t = 0
 	prev_r = 50
-	frame_start = 68
-	frame_end = 90
+	frame_start = 68+11
+	frame_end = 85
 	frame_counter = 0
 	print("running reader")
 	# 10_14_25 to 10_14_42
@@ -259,12 +267,14 @@ def iterate_times(logpath):
 				algos[0] = GridScanDF(gridsize, r, c, d, min_points)
 				prev_r = rng
 
-			df = pd.DataFrame({"time": t, "x": msg.x_indices, "y": msg.y_indices})
+			df = pd.DataFrame({"time": t, "x": msg.x_indices, "y": msg.y_indices, "intens": msg.intensities})
+			df = df[(df["x"] > -1.5) & (df["x"] < 16.0) & (df["y"] > -36.0) & (df["y"] < -7.5)]
 
 			t_string = (pd.to_datetime(timestamp, unit='ns') + pd.Timedelta(hours=1)).strftime('%H_%M_%S')
 			# print(t_string)
 			print("points in df:", len(df))
 			if len(df) > N:
+				# TODO: please do not sample uniformly, more towards the centre and less at the end!
 				sdf = df.sample(n=N)
 			else:
 				sdf = df

@@ -308,14 +308,25 @@ class DBSCANDF:
 			point_count = len(cluster_points)
 			centre_x = cluster_points['x'].mean()
 			centre_y = cluster_points['y'].mean()
+			# Calculate the weighted sums
+			weighted_x_sum = (cluster_points['x'] * cluster_points['intens']).sum()
+			weighted_y_sum = (cluster_points['y'] * cluster_points['intens']).sum()
+
+			# Calculate the total intensity
+			total_intensity = cluster_points['intens'].sum()
+
+			# Calculate the mass center
+			mass_center_x = weighted_x_sum / total_intensity
+			mass_center_y = weighted_y_sum / total_intensity
 			max_x = cluster_points['x'].max()
 			min_x = cluster_points['x'].min()
 			max_y = cluster_points['y'].max()
 			min_y = cluster_points['y'].min()
 			box_centre_x = (max_x + min_x) / 2
 			box_centre_y = (max_y + min_y) / 2
+			# mass centre used to be centre x and y
 
-			new_clust = pd.DataFrame({'id': [id], 'mass_center_x': [centre_x], 'mass_center_y': [centre_y], 'max_x': [max_x], 'min_x': [min_x], 
+			new_clust = pd.DataFrame({'id': [id], 'mass_center_x': [mass_center_x], 'mass_center_y': [mass_center_y], 'max_x': [max_x], 'min_x': [min_x], 
 								'max_y': [max_y], 'min_y': [min_y], 'box_centre_x': [box_centre_x], 
 								'box_centre_y': [box_centre_y], 'point_count': [point_count], 'box_count': [1]})
 
