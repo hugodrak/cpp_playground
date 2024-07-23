@@ -5,3 +5,4 @@ out/*
 *.png
 *.csv
 *.pyc
+*.npy

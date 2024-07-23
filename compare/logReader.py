@@ -23,6 +23,8 @@ uint8[] doppler_returns
 		MSG_TYPE = "radar_msgs/RadarScanCartesian"
 		register_types(get_types_from_msg(RADARSPOKE_MSG, MSG_TYPE))
 		self.reader = AnyReader([Path(self.path)])
+		self.reader.open()
+		print(self.reader.isopen)
 		self.print_meta(self.reader)
 		self.connections = [x for x in self.reader.connections if x.topic == TOPIC]
 		self.iterator = self.reader.messages(connections=self.connections)
@@ -58,4 +60,5 @@ if __name__ == "__main__":
 	log = LogReader("/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/5-2/rosbag2_2024_02_16-14_54_56")
 	for i in range(2):
 		print(next(log))
+	log.reader.close()
 		

@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import DBSCAN
 
+"""
+Created by Hugo Drakeskär 2024
+"""
 
 class GridScanDF:
 	def __init__(self, n, r, c, d, min_points=1):
