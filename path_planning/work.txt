@@ -1,0 +1,386 @@
+Use of the Object Catalogue for ENC 
+  
+ 
+          A.37 
+ 
+S-57 Appendix B.1 - Annex A 
+January 2018 
+Edition 4.1.0 
+structure in the water and/or adjoining the land.  It may also refer to training walls, which are not 
+necessarily connected to, nor form part of, the shoreline.” 
+4.6 
+Harbour installations 
+4.6.1 
+Harbour facilities (see S-4 – B-320 and B-321.5) 
+If it is required to encode a harbour facility, it must be done using the object class HRBFAC. 
+Geo object:  
+Harbour facility (HRBFAC)  
+(P,A) 
+Attributes: 
+ 
+CATHAF  
+CONDTN 
+DATEND  
+DATSTA  
+NATCON 
+ 
+NOBJNM 
+ 
+OBJNAM 
+PEREND 
+ 
+PERSTA  
+STATUS  
+INFORM  
+NINFOM 
+Remarks: 
+ Depending on the navigational purpose, harbour facilities are defined by: an area including docks, 
+basins, and dockside equipment; or a point. 
+ If it is required to encode a terminal with facilities to load/unload or store shipping containers, this 
+should be done using HRBFAC with attribute CATHAF = 10 (container terminal). 
+ If it is required to encode a covered terminal into which ships can go, this should be done using 
+HRBFAC with the purpose of the terminal defined by CATHAF.  The roof of the terminal may be 
+encoded using the attribute NATCON, and the maximum height and/or draught of vessels able to 
+use the terminal encoded using the attribute INFORM.  Alternatively, the roofed structure may be 
+encoded using a BUISGL object (see clause 4.8.15). 
+4.6.2 
+Berths (see S-4 – B-321, B-321.6-9 and B-410.1) 
+If it is required to encode a berth, it must be done using the object class BERTHS. 
+Geo object:  
+Berth (BERTHS)  
+(P,L,A) 
+Attributes: 
+ 
+DATEND  
+DATSTA  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+DRVAL1  - minimum depth at the berth.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     
+NOBJNM 
+ 
+OBJNAM  - name or number of the berth. 
+ 
+ 
+ 
+ 
+ 
+     
+PEREND 
+ 
+PERSTA  
+QUASOU 
+SOUACC 
+STATUS  
+VERDAT  
+INFORM - 
+maximum draft permitted at the berth (for example Maximum draft 
+permitted = 14 metres). 
+NINFOM 
+Remarks: 
+ The berth encodes the named place where a vessel can be moored adjacent to a shoreline 
+construction.  The shoreline construction itself should be encoded using the object class SLCONS 
+(see clause 4.5.2). 
+ Landing places for boats should be encoded as small craft facilities (see clause 4.6.5). 
+4.6.3 
+Harbour offices (see S-4 – B-325) 
+If it is required to encode a harbour office, it must be done using the object class BUISGL (see clause 
+4.8.15), with the attribute FUNCTN taking at least one of the values: 
+ 
+2 - harbour-master’s office 
+ 
+3 - custom office 
+ 
+4 - health office 
+ 
+11 - pilot office 
+4.6.4 
+Checkpoints 
+If it is required to encode a checkpoint, it must be done using the object class CHKPNT. 
+Geo object:  
+Checkpoint (CHKPNT) 
+ 
+(P,A) 
+Attributes: 
+ 
+CATCHP  
+NOBJNM 
+ 
+OBJNAM 
+ 
+STATUS  
+INFORM  
+NINFOM 
+++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Page num: 112
+ 
+Use of the Object Catalogue for ENC 
+  
+ 
+          A.101 
+ 
+S-57 Appendix B.1 - Annex A 
+January 2018 
+Edition 4.1.0 
+Feature 
+INT1 
+Object-
+class 
+BCNSHP 
+CATSPM 
+Other attributes 
+Notice board 
+Q126 
+BCNSPP 
+ 
+18 
+ 
+Buoyant beacon 
+P5 
+BCN*** 
+7 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+table 12.2 
+ 
+12.3.2 
+Lighthouses (see S-4 – B-457.3) 
+If it is required to encode a lighthouse, it must be done using a LNDMRK object (see clause 4.8.15), 
+with attributes CATLMK = 17 (tower) and FUNCTN = 33 (light support) for towers, or using a BUISGL 
+object (see clause 4.8.15), with the attribute FUNCTN = 33, for any other shapes. 
+If it is required to encode the attributes ELEVAT, HEIGHT and VERLEN for a lighthouse, this must be 
+done as described in clause 12.3.1. 
+If the lighthouse is permanently extinguished/unlit, this must be indicated by population of the attribute 
+STATUS = 4 (not in use) for the LNDMRK/BUISGL, and the LIGHTS object(s) must be removed.  
+Where a lighthouse is illuminated by floodlights, the additional value of STATUS = 12 (illuminated) 
+must also be populated.  For lights that are temporarily extinguished, see clause 2.6.2.2 – paragraph 
+10(i). 
+12.3.3 
+Daymarks 
+If it is required to encode a daymark, it must be done using the object class DAYMAR. 
+Geo object:  
+Daymark (DAYMAR)  
+(P) 
+Attributes: 
+ 
+CATSPM  
+COLOUR 
+COLPAT  
+DATEND  
+DATSTA  
+ELEVAT  
+HEIGHT 
+NATCON 
+ 
+NOBJNM 
+ 
+OBJNAM 
+ 
+PEREND 
+ 
+PERSTA  
+STATUS  
+TOPSHP 
+VERACC 
+ 
+VERDAT  
+VERLEN  
+INFORM  
+NINFOM 
+Remarks: 
+ If it is required to encode the attributes ELEVAT, HEIGHT and VERLEN for a daymark, this must 
+be done as described in clause 12.3.1. 
+12.4 
+Floating structures (see S-4 – B-460) 
+12.4.1 
+Buoys 
+If it is required to encode a buoy, it must be done using the object classes BOYCAR, BOYINB, 
+BOYISD, BOYLAT, BOYSAW or BOYSPP. 
+Geo objects: 
+ 
+Buoy, cardinal (BOYCAR) 
+ 
+ 
+(P) 
+Buoy, installation (BOYINB)  
+ 
+(P) 
+Buoy, isolated danger (BOYISD) 
+(P) 
+Buoy, lateral (BOYLAT)  
+ 
+ 
+(P) 
+Buoy, safe water (BOYSAW) 
+ 
+(P,A) 
+Buoy, special purpose (BOYSPP) (P,A) 
+Attributes: 
+ 
+BOYSHP 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     
+CATCAM  - only for BOYCAR.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+CATINB   - only for BOYINB.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+      
+CATLAM  - only for BOYLAT.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     
+CATSPM  - only for BOYSPP.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     
+COLOUR 
+COLPAT  
+CONRAD 
+DATEND  
+DATSTA  
+ 
+ 
+ 
+     
+MARSYS  - only if different to the value encoded on meta object M_NSYS.     
+NATCON 
+ 
+NOBJNM 
+ 
+OBJNAM 
+ 
+PEREND 
+ 
+PERSTA  
+ 
+ 
+ 
+     
+PRODCT  - only for BOYINB.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+STATUS  
+VERACC 
+ 
+VERLEN  
+INFORM  
+NINFOM 

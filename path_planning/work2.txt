@@ -1,0 +1,45 @@
+Geo object:  
+Daymark (DAYMAR)  
+(P) 
+Attributes: 
+ 
+CATSPM  
+
+
+Geo objects: 
+ 
+Buoy, cardinal (BOYCAR) 
+ 
+ 
+(P) 
+Buoy, installation (BOYINB)  
+ 
+(P) 
+Buoy, isolated danger (BOYISD) 
+(P) 
+Buoy, lateral (BOYLAT)  
+ 
+ 
+(P) 
+Buoy, safe water (BOYSAW) 
+ 
+(P) 
+Buoy, special purpose (BOYSPP) (P) 
+Attributes: 
+ 
+BOYSHP 
+
+
+
+Geo objects: 
+ 
+Light, day (LGHDAY) 
+ 
+ 
+(P) 
+Light, night (LGHNGH) 
+(P) 
+Attributes: 
+ 
+BOYSHP 
+ 

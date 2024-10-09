@@ -268,7 +268,7 @@ class DBSCANDF:
 		self.shortname = "DBSCAN"
 		self.eps = eps
 		self.min_samples = min_samples
-
+		print(f"DBSCAN eps: {self.eps}")
 		self.dbscan = DBSCAN(eps=self.eps, min_samples=self.min_samples)
 
 	def fit_predict(self, points):

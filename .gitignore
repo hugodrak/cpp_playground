@@ -8,3 +8,10 @@ out/*.*:wq:wq
 *.npy
 compare/out/*
 venv/*
+wireshark_logs/*
+out/*
+logs/*
+path_planning/chart_files/*
+path_planning/out/*
+compare_2/*
+*.log

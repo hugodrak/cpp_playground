@@ -1,0 +1,827 @@
+{
+    "SE4GI8PA.000": {
+        "name": "SE4GI8PA.000",
+        "lat_bounds": [
+            57.75,
+            57.875
+        ],
+        "lon_bounds": [
+            11.625,
+            11.75
+        ]
+    },
+    "SE4EI7LA.000": {
+        "name": "SE4EI7LA.000",
+        "lat_bounds": [
+            57.5,
+            57.75
+        ],
+        "lon_bounds": [
+            11.5,
+            11.75
+        ]
+    },
+    "SE4DIC1A.000": {
+        "name": "SE4DIC1A.000",
+        "lat_bounds": [
+            58.5,
+            59.0
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE5II7LB.000": {
+        "name": "SE5II7LB.000",
+        "lat_bounds": [
+            57.625,
+            57.75
+        ],
+        "lon_bounds": [
+            11.875,
+            12.0
+        ]
+    },
+    "SE2BHS1C.000": {
+        "name": "SE2BHS1C.000",
+        "lat_bounds": [
+            54.0,
+            58.0
+        ],
+        "lon_bounds": [
+            12.0,
+            16.0
+        ]
+    },
+    "SE3DI7LA.000": {
+        "name": "SE3DI7LA.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE4EIAX8.000": {
+        "name": "SE4EIAX8.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            11.0,
+            11.25
+        ]
+    },
+    "SE3CI5DC.000": {
+        "name": "SE3CI5DC.000",
+        "lat_bounds": [
+            57.0,
+            58.0
+        ],
+        "lon_bounds": [
+            12.0,
+            13.0
+        ]
+    },
+    "SE5HI7LB.000": {
+        "name": "SE5HI7LB.000",
+        "lat_bounds": [
+            57.625,
+            57.75
+        ],
+        "lon_bounds": [
+            11.75,
+            11.875
+        ]
+    },
+    "SE5DI9TA.000": {
+        "name": "SE5DI9TA.000",
+        "lat_bounds": [
+            58.0,
+            58.5
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE4DI5DC.000": {
+        "name": "SE4DI5DC.000",
+        "lat_bounds": [
+            57.0,
+            57.5
+        ],
+        "lon_bounds": [
+            12.0,
+            12.5
+        ]
+    },
+    "SE4FI8PA.000": {
+        "name": "SE4FI8PA.000",
+        "lat_bounds": [
+            57.75,
+            57.875
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE6GIAX9.000": {
+        "name": "SE6GIAX9.000",
+        "lat_bounds": [
+            58.25,
+            58.375
+        ],
+        "lon_bounds": [
+            11.375,
+            11.5
+        ]
+    },
+    "SE3DIC1A.000": {
+        "name": "SE3DIC1A.000",
+        "lat_bounds": [
+            58.5,
+            59.0
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE6GI5DC.000": {
+        "name": "SE6GI5DC.000",
+        "lat_bounds": [
+            57.0,
+            57.125
+        ],
+        "lon_bounds": [
+            12.125,
+            12.25
+        ]
+    },
+    "SE6FI9TB.000": {
+        "name": "SE6FI9TB.000",
+        "lat_bounds": [
+            58.0,
+            58.125
+        ],
+        "lon_bounds": [
+            11.75,
+            11.875
+        ]
+    },
+    "SE3CI9TC.000": {
+        "name": "SE3CI9TC.000",
+        "lat_bounds": [
+            58.0,
+            59.0
+        ],
+        "lon_bounds": [
+            12.0,
+            13.0
+        ]
+    },
+    "SE6DI7LC.000": {
+        "name": "SE6DI7LC.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            12.0,
+            12.5
+        ]
+    },
+    "SE4IIAX9.000": {
+        "name": "SE4IIAX9.000",
+        "lat_bounds": [
+            58.375,
+            58.5
+        ],
+        "lon_bounds": [
+            11.375,
+            11.5
+        ]
+    },
+    "SE6HI9TA.000": {
+        "name": "SE6HI9TA.000",
+        "lat_bounds": [
+            58.125,
+            58.25
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE3DIC18.000": {
+        "name": "SE3DIC18.000",
+        "lat_bounds": [
+            58.5,
+            59.0
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE4FI9T9.000": {
+        "name": "SE4FI9T9.000",
+        "lat_bounds": [
+            58.0,
+            58.125
+        ],
+        "lon_bounds": [
+            11.25,
+            11.375
+        ]
+    },
+    "SE4EI9TB.000": {
+        "name": "SE4EI9TB.000",
+        "lat_bounds": [
+            58.0,
+            58.25
+        ],
+        "lon_bounds": [
+            11.75,
+            12.0
+        ]
+    },
+    "SE4EI8PB.000": {
+        "name": "SE4EI8PB.000",
+        "lat_bounds": [
+            57.75,
+            58.0
+        ],
+        "lon_bounds": [
+            11.75,
+            12.0
+        ]
+    },
+    "SE4DI7L8.000": {
+        "name": "SE4DI7L8.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE5II8PA.000": {
+        "name": "SE5II8PA.000",
+        "lat_bounds": [
+            57.875,
+            58.0
+        ],
+        "lon_bounds": [
+            11.625,
+            11.75
+        ]
+    },
+    "SE4EIC18.000": {
+        "name": "SE4EIC18.000",
+        "lat_bounds": [
+            58.5,
+            58.75
+        ],
+        "lon_bounds": [
+            11.0,
+            11.25
+        ]
+    },
+    "SE4EIC19.000": {
+        "name": "SE4EIC19.000",
+        "lat_bounds": [
+            58.5,
+            58.75
+        ],
+        "lon_bounds": [
+            11.25,
+            11.5
+        ]
+    },
+    "SE2BHS0W.000": {
+        "name": "SE2BHS0W.000",
+        "lat_bounds": [
+            54.0,
+            58.0
+        ],
+        "lon_bounds": [
+            8.0,
+            12.0
+        ]
+    },
+    "SE6EI6HC.000": {
+        "name": "SE6EI6HC.000",
+        "lat_bounds": [
+            57.25,
+            57.5
+        ],
+        "lon_bounds": [
+            12.0,
+            12.25
+        ]
+    },
+    "SE4EIAXA.000": {
+        "name": "SE4EIAXA.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            11.5,
+            11.75
+        ]
+    },
+    "SE3DI7L8.000": {
+        "name": "SE3DI7L8.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE4HIAX9.000": {
+        "name": "SE4HIAX9.000",
+        "lat_bounds": [
+            58.375,
+            58.5
+        ],
+        "lon_bounds": [
+            11.25,
+            11.375
+        ]
+    },
+    "SE5EI9T8.000": {
+        "name": "SE5EI9T8.000",
+        "lat_bounds": [
+            58.0,
+            58.25
+        ],
+        "lon_bounds": [
+            11.0,
+            11.25
+        ]
+    },
+    "SE5EI9T9.000": {
+        "name": "SE5EI9T9.000",
+        "lat_bounds": [
+            58.0,
+            58.25
+        ],
+        "lon_bounds": [
+            11.25,
+            11.5
+        ]
+    },
+    "SE5HI8PA.000": {
+        "name": "SE5HI8PA.000",
+        "lat_bounds": [
+            57.875,
+            58.0
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE4GI9T9.000": {
+        "name": "SE4GI9T9.000",
+        "lat_bounds": [
+            58.0,
+            58.125
+        ],
+        "lon_bounds": [
+            11.375,
+            11.5
+        ]
+    },
+    "SE6FI5DD.000": {
+        "name": "SE6FI5DD.000",
+        "lat_bounds": [
+            57.0,
+            57.125
+        ],
+        "lon_bounds": [
+            12.25,
+            12.375
+        ]
+    },
+    "SE2BI9TC.000": {
+        "name": "SE2BI9TC.000",
+        "lat_bounds": [
+            58.0,
+            62.0
+        ],
+        "lon_bounds": [
+            12.0,
+            16.0
+        ]
+    },
+    "SE3DI9T8.000": {
+        "name": "SE3DI9T8.000",
+        "lat_bounds": [
+            58.0,
+            58.5
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE5FI7LB.000": {
+        "name": "SE5FI7LB.000",
+        "lat_bounds": [
+            57.5,
+            57.625
+        ],
+        "lon_bounds": [
+            11.75,
+            11.875
+        ]
+    },
+    "SE5CI9TC.000": {
+        "name": "SE5CI9TC.000",
+        "lat_bounds": [
+            58.0,
+            59.0
+        ],
+        "lon_bounds": [
+            12.0,
+            13.0
+        ]
+    },
+    "SE4DI5DA.000": {
+        "name": "SE4DI5DA.000",
+        "lat_bounds": [
+            57.0,
+            57.5
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE4HI8PA.000": {
+        "name": "SE4HI8PA.000",
+        "lat_bounds": [
+            57.875,
+            58.0
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE4EI9T8.000": {
+        "name": "SE4EI9T8.000",
+        "lat_bounds": [
+            58.0,
+            58.25
+        ],
+        "lon_bounds": [
+            11.0,
+            11.25
+        ]
+    },
+    "SE5DIC18.000": {
+        "name": "SE5DIC18.000",
+        "lat_bounds": [
+            58.5,
+            59.0
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE3CI5D4.000": {
+        "name": "SE3CI5D4.000",
+        "lat_bounds": [
+            57.0,
+            58.0
+        ],
+        "lon_bounds": [
+            10.0,
+            11.0
+        ]
+    },
+    "SE6DI9TC.000": {
+        "name": "SE6DI9TC.000",
+        "lat_bounds": [
+            58.0,
+            58.5
+        ],
+        "lon_bounds": [
+            12.0,
+            12.5
+        ]
+    },
+    "SE6HI5DC.000": {
+        "name": "SE6HI5DC.000",
+        "lat_bounds": [
+            57.125,
+            57.25
+        ],
+        "lon_bounds": [
+            12.0,
+            12.125
+        ]
+    },
+    "SE3DI5DA.000": {
+        "name": "SE3DI5DA.000",
+        "lat_bounds": [
+            57.0,
+            57.5
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE4EI7LB.000": {
+        "name": "SE4EI7LB.000",
+        "lat_bounds": [
+            57.5,
+            57.75
+        ],
+        "lon_bounds": [
+            11.75,
+            12.0
+        ]
+    },
+    "SE4II8PA.000": {
+        "name": "SE4II8PA.000",
+        "lat_bounds": [
+            57.875,
+            58.0
+        ],
+        "lon_bounds": [
+            11.625,
+            11.75
+        ]
+    },
+    "SE4EIAXD.000": {
+        "name": "SE4EIAXD.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            12.25,
+            12.5
+        ]
+    },
+    "SE5DI7L8.000": {
+        "name": "SE5DI7L8.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE5GI7LB.000": {
+        "name": "SE5GI7LB.000",
+        "lat_bounds": [
+            57.5,
+            57.625
+        ],
+        "lon_bounds": [
+            11.875,
+            12.0
+        ]
+    },
+    "SE4DIC1C.000": {
+        "name": "SE4DIC1C.000",
+        "lat_bounds": [
+            58.5,
+            59.0
+        ],
+        "lon_bounds": [
+            12.0,
+            12.5
+        ]
+    },
+    "SE4CI9T4.000": {
+        "name": "SE4CI9T4.000",
+        "lat_bounds": [
+            58.0,
+            59.0
+        ],
+        "lon_bounds": [
+            10.0,
+            11.0
+        ]
+    },
+    "SE2BI9SW.000": {
+        "name": "SE2BI9SW.000",
+        "lat_bounds": [
+            58.0,
+            62.0
+        ],
+        "lon_bounds": [
+            8.0,
+            12.0
+        ]
+    },
+    "SE5FI8PA.000": {
+        "name": "SE5FI8PA.000",
+        "lat_bounds": [
+            57.75,
+            57.875
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE4II9T9.000": {
+        "name": "SE4II9T9.000",
+        "lat_bounds": [
+            58.125,
+            58.25
+        ],
+        "lon_bounds": [
+            11.375,
+            11.5
+        ]
+    },
+    "SE3DI5D8.000": {
+        "name": "SE3DI5D8.000",
+        "lat_bounds": [
+            57.0,
+            57.5
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE4FIAX9.000": {
+        "name": "SE4FIAX9.000",
+        "lat_bounds": [
+            58.25,
+            58.375
+        ],
+        "lon_bounds": [
+            11.25,
+            11.375
+        ]
+    },
+    "SE4EIAXB.000": {
+        "name": "SE4EIAXB.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            11.75,
+            12.0
+        ]
+    },
+    "SE4EI9TA.000": {
+        "name": "SE4EI9TA.000",
+        "lat_bounds": [
+            58.0,
+            58.25
+        ],
+        "lon_bounds": [
+            11.5,
+            11.75
+        ]
+    },
+    "SE4HI9T9.000": {
+        "name": "SE4HI9T9.000",
+        "lat_bounds": [
+            58.125,
+            58.25
+        ],
+        "lon_bounds": [
+            11.25,
+            11.375
+        ]
+    },
+    "SE4DI5D8.000": {
+        "name": "SE4DI5D8.000",
+        "lat_bounds": [
+            57.0,
+            57.5
+        ],
+        "lon_bounds": [
+            11.0,
+            11.5
+        ]
+    },
+    "SE5GI8PA.000": {
+        "name": "SE5GI8PA.000",
+        "lat_bounds": [
+            57.75,
+            57.875
+        ],
+        "lon_bounds": [
+            11.625,
+            11.75
+        ]
+    },
+    "SE5EI7LA.000": {
+        "name": "SE5EI7LA.000",
+        "lat_bounds": [
+            57.5,
+            57.75
+        ],
+        "lon_bounds": [
+            11.5,
+            11.75
+        ]
+    },
+    "SE4GIAX9.000": {
+        "name": "SE4GIAX9.000",
+        "lat_bounds": [
+            58.25,
+            58.375
+        ],
+        "lon_bounds": [
+            11.375,
+            11.5
+        ]
+    },
+    "SE3DI9TA.000": {
+        "name": "SE3DI9TA.000",
+        "lat_bounds": [
+            58.0,
+            58.5
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE6FI9TA.000": {
+        "name": "SE6FI9TA.000",
+        "lat_bounds": [
+            58.0,
+            58.125
+        ],
+        "lon_bounds": [
+            11.5,
+            11.625
+        ]
+    },
+    "SE6DI7LA.000": {
+        "name": "SE6DI7LA.000",
+        "lat_bounds": [
+            57.5,
+            58.0
+        ],
+        "lon_bounds": [
+            11.5,
+            12.0
+        ]
+    },
+    "SE5EIAX9.000": {
+        "name": "SE5EIAX9.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            11.25,
+            11.5
+        ]
+    },
+    "SE5EIAX8.000": {
+        "name": "SE5EIAX8.000",
+        "lat_bounds": [
+            58.25,
+            58.5
+        ],
+        "lon_bounds": [
+            11.0,
+            11.25
+        ]
+    },
+    "SE3CI9T4.000": {
+        "name": "SE3CI9T4.000",
+        "lat_bounds": [
+            58.0,
+            59.0
+        ],
+        "lon_bounds": [
+            10.0,
+            11.0
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+1. convert chart files to json or similar format
+2. iterate through and give each map a min an max lat long 
+3. create an index file with bbox and scale as charts differ, maybe concider just one big database?
+
+# note: consider DB approach?
+# TODO:
+* what weights in edges?
+* what types of nodes?
+* use db
+* live obstruction! IMPORTANT: include swells and danger zones around other vessels.
+* how do we optimize and what for?
+* do we really need to add coast or hinders to nodes? can we just skip them? this due to graph and not map
+
+# path planning
+1. get route reach, ie which maps we need, and remeber the possibility of going putside the current map, maybe add it to a portable format??
+2. when route start end created, do an heurisitcs map but firstly create a node networks of cells i think is the best
+where we downsample the grid to some good scale, say 5x5 meters. Then create node network with codes as (hinder, free, slow, shallow)
+then do weighted A* or djikstra. A* probably because we can easily know the distance to target via coordinates.
+3. run A* initially, but maybe also during like If a ship interferes? Then mark that as a live obstruction or danger. 
+4. set the route, but also upscale it again and check that it does not interfere with actual coordinates of hinders.
+5. during this route, maybe log rolling, speed, diversions from route as to store to a quality index like tesla.
+6. 

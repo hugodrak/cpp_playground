@@ -1,0 +1,944 @@
+{
+    "ACHARE": {
+        "area": true,
+        "desc": "Anchorage area",
+        "line": false,
+        "point": true
+    },
+    "ACHBRT": {
+        "area": true,
+        "desc": "Anchor berth",
+        "line": false,
+        "point": true
+    },
+    "ADMARE": {
+        "area": true,
+        "desc": "Administration area",
+        "line": false,
+        "point": false
+    },
+    "AIRARE": {
+        "area": true,
+        "desc": "Airport / airfield",
+        "line": false,
+        "point": true
+    },
+    "ARCSLN": {
+        "area": true,
+        "desc": "Archipelagic Sea Lane",
+        "line": false,
+        "point": false
+    },
+    "AXLSIS": {
+        "area": false,
+        "desc": "Archipelagic Sea Lane Axis",
+        "line": true,
+        "point": false
+    },
+    "BCNCAR": {
+        "area": false,
+        "desc": "Beacon, cardinal",
+        "line": false,
+        "point": true
+    },
+    "BCNISD": {
+        "area": false,
+        "desc": "Beacon, isolated danger",
+        "line": false,
+        "point": true
+    },
+    "BCNLAT": {
+        "area": false,
+        "desc": "Beacon, lateral",
+        "line": false,
+        "point": true
+    },
+    "BCNSAW": {
+        "area": false,
+        "desc": "Beacon, safe water",
+        "line": false,
+        "point": true
+    },
+    "BCNSPP": {
+        "area": false,
+        "desc": "Beacon, special purpose",
+        "line": false,
+        "point": true
+    },
+    "BERTHS": {
+        "area": true,
+        "desc": "Berth",
+        "line": true,
+        "point": true
+    },
+    "BOYCAR": {
+        "area": false,
+        "desc": "Buoy, cardinal",
+        "line": false,
+        "point": true
+    },
+    "BOYINB": {
+        "area": false,
+        "desc": "Buoy, installation",
+        "line": false,
+        "point": true
+    },
+    "BOYISD": {
+        "area": false,
+        "desc": "Buoy, isolated danger",
+        "line": false,
+        "point": true
+    },
+    "BOYLAT": {
+        "area": false,
+        "desc": "Buoy, lateral",
+        "line": false,
+        "point": true
+    },
+    "BOYSAW": {
+        "area": false,
+        "desc": "Buoy, safe water",
+        "line": false,
+        "point": true
+    },
+    "BOYSPP": {
+        "area": false,
+        "desc": "Buoy, special purpose",
+        "line": false,
+        "point": true
+    },
+    "BRIDGE": {
+        "area": true,
+        "desc": "Bridge",
+        "line": true,
+        "point": true
+    },
+    "BUAARE": {
+        "area": true,
+        "desc": "Built-up area",
+        "line": false,
+        "point": true
+    },
+    "BUISGL": {
+        "area": true,
+        "desc": "Building, single",
+        "line": false,
+        "point": true
+    },
+    "CANALS": {
+        "area": true,
+        "desc": "Canal",
+        "line": true,
+        "point": false
+    },
+    "CAUSWY": {
+        "area": true,
+        "desc": "Causeway",
+        "line": true,
+        "point": false
+    },
+    "CBLARE": {
+        "area": true,
+        "desc": "Cable area",
+        "line": false,
+        "point": false
+    },
+    "CBLOHD": {
+        "area": false,
+        "desc": "Cable, overhead",
+        "line": true,
+        "point": false
+    },
+    "CBLSUB": {
+        "area": false,
+        "desc": "Cable, submarine",
+        "line": true,
+        "point": false
+    },
+    "CGUSTA": {
+        "area": false,
+        "desc": "Coastguard station",
+        "line": false,
+        "point": true
+    },
+    "CHKPNT": {
+        "area": true,
+        "desc": "Checkpoint",
+        "line": false,
+        "point": true
+    },
+    "COALNE": {
+        "area": false,
+        "desc": "Coastline",
+        "line": true,
+        "point": false
+    },
+    "CONVYR": {
+        "area": true,
+        "desc": "Conveyor",
+        "line": true,
+        "point": false
+    },
+    "CONZNE": {
+        "area": true,
+        "desc": "Contiguous Zone",
+        "line": false,
+        "point": false
+    },
+    "COSARE": {
+        "area": true,
+        "desc": "Continental Shelf area",
+        "line": false,
+        "point": false
+    },
+    "CRANES": {
+        "area": true,
+        "desc": "Crane",
+        "line": false,
+        "point": true
+    },
+    "CTNARE": {
+        "area": true,
+        "desc": "Caution area",
+        "line": false,
+        "point": true
+    },
+    "CTRPNT": {
+        "area": false,
+        "desc": "Control point",
+        "line": false,
+        "point": true
+    },
+    "CTSARE": {
+        "area": true,
+        "desc": "Cargo transhipment area",
+        "line": false,
+        "point": true
+    },
+    "CURENT": {
+        "area": false,
+        "desc": "Current",
+        "line": false,
+        "point": true
+    },
+    "CUSZNE": {
+        "area": true,
+        "desc": "Custom zone",
+        "line": false,
+        "point": false
+    },
+    "DAMCON": {
+        "area": true,
+        "desc": "Dam",
+        "line": true,
+        "point": true
+    },
+    "DAYMAR": {
+        "area": false,
+        "desc": "Daymark",
+        "line": false,
+        "point": true
+    },
+    "DEPARE": {
+        "area": true,
+        "desc": "Depth area",
+        "line": false,
+        "point": false
+    },
+    "DEPCNT": {
+        "area": false,
+        "desc": "Depth contour",
+        "line": true,
+        "point": false
+    },
+    "DISMAR": {
+        "area": false,
+        "desc": "Distance mark",
+        "line": false,
+        "point": true
+    },
+    "DMPGRD": {
+        "area": true,
+        "desc": "Dumping ground",
+        "line": false,
+        "point": true
+    },
+    "DOCARE": {
+        "area": true,
+        "desc": "Dock area",
+        "line": false,
+        "point": false
+    },
+    "DRGARE": {
+        "area": true,
+        "desc": "Dredged area",
+        "line": false,
+        "point": false
+    },
+    "DRYDOC": {
+        "area": true,
+        "desc": "Dry dock",
+        "line": false,
+        "point": false
+    },
+	"DSID":{
+		"area":false,
+		"desc":"Data Set Identification",
+		"line":false,
+		"point":false
+	 },
+    "DWRTCL": {
+        "area": false,
+        "desc": "Deep water route centreline",
+        "line": true,
+        "point": false
+    },
+    "DWRTPT": {
+        "area": true,
+        "desc": "Deep water route part",
+        "line": false,
+        "point": false
+    },
+    "DYKCON": {
+        "area": true,
+        "desc": "Dyke",
+        "line": true,
+        "point": false
+    },
+    "EXEZNE": {
+        "area": true,
+        "desc": "Exclusive Economic Zone",
+        "line": false,
+        "point": false
+    },
+    "FAIRWY": {
+        "area": true,
+        "desc": "Fairway",
+        "line": false,
+        "point": false
+    },
+    "FERYRT": {
+        "area": true,
+        "desc": "Ferry route",
+        "line": true,
+        "point": false
+    },
+    "FLODOC": {
+        "area": true,
+        "desc": "Floating dock",
+        "line": true,
+        "point": false
+    },
+    "FNCLNE": {
+        "area": false,
+        "desc": "Fence/wall",
+        "line": true,
+        "point": false
+    },
+    "FOGSIG": {
+        "area": false,
+        "desc": "Fog signal",
+        "line": false,
+        "point": true
+    },
+    "FORSTC": {
+        "area": true,
+        "desc": "Fortified structure",
+        "line": true,
+        "point": true
+    },
+    "FRPARE": {
+        "area": true,
+        "desc": "Free port area",
+        "line": false,
+        "point": false
+    },
+    "FSHFAC": {
+        "area": true,
+        "desc": "Fishing facility",
+        "line": true,
+        "point": true
+    },
+    "FSHGRD": {
+        "area": true,
+        "desc": "Fishing ground",
+        "line": false,
+        "point": false
+    },
+    "FSHZNE": {
+        "area": true,
+        "desc": "Fishery zone",
+        "line": false,
+        "point": false
+    },
+    "GATCON": {
+        "area": true,
+        "desc": "Gate",
+        "line": true,
+        "point": true
+    },
+    "GRIDRN": {
+        "area": true,
+        "desc": "Gridiron",
+        "line": false,
+        "point": true
+    },
+    "HRBARE": {
+        "area": true,
+        "desc": "Harbour area",
+        "line": false,
+        "point": false
+    },
+    "HRBFAC": {
+        "area": true,
+        "desc": "Harbour facility",
+        "line": false,
+        "point": true
+    },
+    "HULKES": {
+        "area": true,
+        "desc": "Hulk",
+        "line": false,
+        "point": true
+    },
+    "ICEARE": {
+        "area": true,
+        "desc": "Ice area",
+        "line": false,
+        "point": false
+    },
+    "ICNARE": {
+        "area": true,
+        "desc": "Incineration area",
+        "line": false,
+        "point": true
+    },
+    "ISTZNE": {
+        "area": true,
+        "desc": "Inshore traffic zone",
+        "line": false,
+        "point": false
+    },
+    "LAKARE": {
+        "area": true,
+        "desc": "Lake",
+        "line": false,
+        "point": false
+    },
+    "LIGHTS": {
+        "area": false,
+        "desc": "Light",
+        "line": false,
+        "point": true
+    },
+    "LITFLT": {
+        "area": false,
+        "desc": "Light float",
+        "line": false,
+        "point": true
+    },
+    "LITVES": {
+        "area": false,
+        "desc": "Light vessel",
+        "line": false,
+        "point": true
+    },
+    "LNDARE": {
+        "area": true,
+        "desc": "Land area",
+        "line": true,
+        "point": true
+    },
+    "LNDELV": {
+        "area": false,
+        "desc": "Land elevation",
+        "line": true,
+        "point": true
+    },
+    "LNDMRK": {
+        "area": true,
+        "desc": "Landmark",
+        "line": true,
+        "point": true
+    },
+    "LNDRGN": {
+        "area": true,
+        "desc": "Land region",
+        "line": false,
+        "point": true
+    },
+    "LOCMAG": {
+        "area": true,
+        "desc": "Local magnetic anomaly",
+        "line": true,
+        "point": true
+    },
+    "LOGPON": {
+        "area": true,
+        "desc": "Log pond",
+        "line": false,
+        "point": true
+    },
+    "LOKBSN": {
+        "area": true,
+        "desc": "Lock basin",
+        "line": false,
+        "point": false
+    },
+    "MAGVAR": {
+        "area": true,
+        "desc": "Magnetic variation",
+        "line": true,
+        "point": true
+    },
+    "MARCUL": {
+        "area": true,
+        "desc": "Marine farm / culture",
+        "line": true,
+        "point": true
+    },
+    "MIPARE": {
+        "area": true,
+        "desc": "Military practice area",
+        "line": false,
+        "point": true
+    },
+    "MORFAC": {
+        "area": true,
+        "desc": "Mooring / warping facility",
+        "line": true,
+        "point": true
+    },
+	"M_COVR":{
+		"area":true,
+		"desc":"Meta coverage area",
+		"line":false,
+		"point":false
+	},
+	"M_NPUB":{
+		"area":true,
+		"desc":"Meta Nautical publication information",
+		"line":false,
+		"point":false
+	},
+	"M_NSYS":{
+		"area":true,
+		"desc":"Meta Navigational system of marks",
+		"line":false,
+		"point":false
+	},
+	"M_QUAL":{
+		"area":true,
+		"desc":"Meta Quality of data",
+		"line":false,
+		"point":false
+	},
+	"M_VDAT":{
+		"area":true,
+		"desc":"Meta Vertical datum",
+		"line":false,
+		"point":false
+	},	
+    "NAVLNE": {
+        "area": false,
+        "desc": "Navigation line",
+        "line": true,
+        "point": false
+    },
+    "NEWOBJ": {
+        "area": true,
+        "desc": "New Object",
+        "line": true,
+        "point": true
+    },
+    "OBSTRN": {
+        "area": true,
+        "desc": "Obstruction",
+        "line": true,
+        "point": true
+    },
+    "OFSPLF": {
+        "area": true,
+        "desc": "Offshore platform",
+        "line": false,
+        "point": true
+    },
+    "OILBAR": {
+        "area": false,
+        "desc": "Oil barrier",
+        "line": true,
+        "point": false
+    },
+    "OSPARE": {
+        "area": true,
+        "desc": "Offshore production area",
+        "line": false,
+        "point": false
+    },
+    "PILBOP": {
+        "area": true,
+        "desc": "Pilot boarding place",
+        "line": false,
+        "point": true
+    },
+    "PILPNT": {
+        "area": false,
+        "desc": "Pile",
+        "line": false,
+        "point": true
+    },
+    "PIPARE": {
+        "area": true,
+        "desc": "Pipeline area",
+        "line": false,
+        "point": true
+    },
+    "PIPOHD": {
+        "area": false,
+        "desc": "Pipeline overhead",
+        "line": true,
+        "point": false
+    },
+    "PIPSOL": {
+        "area": false,
+        "desc": "Pipeline, submarine / on land",
+        "line": true,
+        "point": true
+    },
+    "PONTON": {
+        "area": true,
+        "desc": "Pontoon",
+        "line": true,
+        "point": false
+    },
+    "PRCARE": {
+        "area": true,
+        "desc": "Precautionary area",
+        "line": false,
+        "point": true
+    },
+    "PRDARE": {
+        "area": true,
+        "desc": "Production / storage area",
+        "line": false,
+        "point": true
+    },
+    "PYLONS": {
+        "area": true,
+        "desc": "Pylon / bridge support",
+        "line": false,
+        "point": true
+    },
+    "RADLNE": {
+        "area": false,
+        "desc": "Radar line",
+        "line": true,
+        "point": false
+    },
+    "RADRFL": {
+        "area": false,
+        "desc": "Radar reflector",
+        "line": false,
+        "point": true
+    },
+    "RADRNG": {
+        "area": true,
+        "desc": "Radar range",
+        "line": false,
+        "point": false
+    },
+    "RADSTA": {
+        "area": false,
+        "desc": "Radar station",
+        "line": false,
+        "point": true
+    },
+    "RAILWY": {
+        "area": false,
+        "desc": "Railway",
+        "line": true,
+        "point": false
+    },
+    "RAPIDS": {
+        "area": true,
+        "desc": "Rapids",
+        "line": true,
+        "point": true
+    },
+    "RCRTCL": {
+        "area": false,
+        "desc": "Recommended route centreline",
+        "line": true,
+        "point": false
+    },
+    "RCTLPT": {
+        "area": true,
+        "desc": "Recommended traffic lane part",
+        "line": false,
+        "point": true
+    },
+    "RDOCAL": {
+        "area": false,
+        "desc": "Radio calling-in point",
+        "line": true,
+        "point": true
+    },
+    "RDOSTA": {
+        "area": false,
+        "desc": "Radio station",
+        "line": false,
+        "point": true
+    },
+    "RECTRC": {
+        "area": true,
+        "desc": "Recommended track",
+        "line": true,
+        "point": false
+    },
+    "RESARE": {
+        "area": true,
+        "desc": "Restricted area",
+        "line": false,
+        "point": false
+    },
+    "RETRFL": {
+        "area": false,
+        "desc": "Retroreflector",
+        "line": false,
+        "point": true
+    },
+    "RIVERS": {
+        "area": true,
+        "desc": "River",
+        "line": true,
+        "point": false
+    },
+    "ROADWY": {
+        "area": true,
+        "desc": "Road",
+        "line": true,
+        "point": true
+    },
+    "RSCSTA": {
+        "area": false,
+        "desc": "Rescue station",
+        "line": false,
+        "point": true
+    },
+    "RTPBCN": {
+        "area": false,
+        "desc": "Radar transponder beacon",
+        "line": false,
+        "point": true
+    },
+    "RUNWAY": {
+        "area": true,
+        "desc": "Runway",
+        "line": true,
+        "point": true
+    },
+    "SBDARE": {
+        "area": true,
+        "desc": "Seabed area",
+        "line": true,
+        "point": true
+    },
+    "SEAARE": {
+        "area": true,
+        "desc": "Sea area",
+        "line": false,
+        "point": true
+    },
+    "SILTNK": {
+        "area": true,
+        "desc": "Silo / tank",
+        "line": false,
+        "point": true
+    },
+    "SISTAT": {
+        "area": false,
+        "desc": "Signal station, traffic",
+        "line": false,
+        "point": true
+    },
+    "SISTAW": {
+        "area": false,
+        "desc": "Signal station, warning",
+        "line": false,
+        "point": true
+    },
+    "SLCONS": {
+        "area": true,
+        "desc": "Shoreline construction",
+        "line": true,
+        "point": true
+    },
+    "SLOGRD": {
+        "area": true,
+        "desc": "Sloping ground",
+        "line": false,
+        "point": true
+    },
+    "SLOTOP": {
+        "area": false,
+        "desc": "Slope topline",
+        "line": true,
+        "point": false
+    },
+    "SMCFAC": {
+        "area": true,
+        "desc": "Small craft facility",
+        "line": false,
+        "point": true
+    },
+    "SNDWAV": {
+        "area": true,
+        "desc": "Sandwaves",
+        "line": true,
+        "point": true
+    },
+    "SOUNDG": {
+        "area": false,
+        "desc": "Sounding",
+        "line": false,
+        "point": true
+    },
+    "SPLARE": {
+        "area": true,
+        "desc": "Seaplane landing area",
+        "line": false,
+        "point": true
+    },
+    "SPRING": {
+        "area": false,
+        "desc": "Spring",
+        "line": false,
+        "point": true
+    },
+    "STSLNE": {
+        "area": false,
+        "desc": "Straight Territorial Sea Baseline",
+        "line": true,
+        "point": false
+    },
+    "SUBTLN": {
+        "area": true,
+        "desc": "Submarine transit lane",
+        "line": false,
+        "point": false
+    },
+    "SWPARE": {
+        "area": true,
+        "desc": "Swept area",
+        "line": false,
+        "point": false
+    },
+    "TESARE": {
+        "area": true,
+        "desc": "Territorial Sea area",
+        "line": false,
+        "point": false
+    },
+    "TIDEWY": {
+        "area": true,
+        "desc": "Tideway",
+        "line": true,
+        "point": false
+    },
+    "TOPMAR": {
+        "area": false,
+        "desc": "Topmark",
+        "line": false,
+        "point": true
+    },
+    "TSELNE": {
+        "area": false,
+        "desc": "Traffic separation line",
+        "line": true,
+        "point": false
+    },
+    "TSEZNE": {
+        "area": true,
+        "desc": "Traffic separation zone",
+        "line": false,
+        "point": false
+    },
+    "TSSBND": {
+        "area": false,
+        "desc": "Traffic separation scheme boundary",
+        "line": true,
+        "point": false
+    },
+    "TSSCRS": {
+        "area": true,
+        "desc": "Traffic separation scheme crossing",
+        "line": false,
+        "point": false
+    },
+    "TSSLPT": {
+        "area": true,
+        "desc": "Traffic separation scheme lane part",
+        "line": false,
+        "point": false
+    },
+    "TSSRON": {
+        "area": true,
+        "desc": "Traffic separation scheme roundabout",
+        "line": false,
+        "point": false
+    },
+    "TUNNEL": {
+        "area": true,
+        "desc": "Tunnel",
+        "line": true,
+        "point": true
+    },
+    "TWRTPT": {
+        "area": true,
+        "desc": "Two-way route part",
+        "line": false,
+        "point": false
+    },
+    "UNSARE": {
+        "area": true,
+        "desc": "Unsurveyed area",
+        "line": false,
+        "point": false
+    },
+    "UWTROC": {
+        "area": false,
+        "desc": "Underwater / awash rock",
+        "line": false,
+        "point": true
+    },
+    "VEGATN": {
+        "area": true,
+        "desc": "Vegetation",
+        "line": true,
+        "point": true
+    },
+    "WATFAL": {
+        "area": false,
+        "desc": "Waterfall",
+        "line": true,
+        "point": true
+    },
+    "WATTUR": {
+        "area": true,
+        "desc": "Water turbulence",
+        "line": true,
+        "point": true
+    },
+    "WEDKLP": {
+        "area": true,
+        "desc": "Weed / kelp",
+        "line": false,
+        "point": true
+    },
+    "WRECKS": {
+        "area": true,
+        "desc": "Wreck",
+        "line": false,
+        "point": true
+    }
+}

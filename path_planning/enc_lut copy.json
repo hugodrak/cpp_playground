@@ -1,0 +1,272 @@
+{
+	"ACHARE":{
+	   "area":true,
+	   "desc":"Anchorage area",
+	   "line":false,
+	   "point":true
+	},
+	"ADMARE":{
+	   "area":true,
+	   "desc":"Administration area",
+	   "line":false,
+	   "point":false
+	},
+	"BOYCAR":{
+	   "area":false,
+	   "desc":"Buoy, cardinal",
+	   "line":false,
+	   "point":true
+	},
+	"BOYINB":{
+	   "area":false,
+	   "desc":"Buoy, installation",
+	   "line":false,
+	   "point":true
+	},
+	"BOYISD":{
+	   "area":false,
+	   "desc":"Buoy, isolated danger",
+	   "line":false,
+	   "point":true
+	},
+	"BOYLAT":{
+	   "area":false,
+	   "desc":"Buoy, lateral",
+	   "line":false,
+	   "point":true
+	},
+	"BOYSAW":{
+	   "area":false,
+	   "desc":"Buoy, safe water",
+	   "line":false,
+	   "point":true
+	},
+	"BOYSPP":{
+	   "area":false,
+	   "desc":"Buoy, special purpose",
+	   "line":false,
+	   "point":true
+	},
+	"CBLSUB":{
+	   "area":false,
+	   "desc":"Cable, submarine",
+	   "line":true,
+	   "point":false
+	},
+	"COALNE":{
+	   "area":false,
+	   "desc":"Coastline",
+	   "line":true,
+	   "point":false
+	},
+	"CTNARE":{
+	   "area":true,
+	   "desc":"Caution area",
+	   "line":false,
+	   "point":true
+	},
+	"DEPARE":{
+	   "area":true,
+	   "desc":"Depth area",
+	   "line":false,
+	   "point":false
+	},
+	"DEPCNT":{
+	   "area":false,
+	   "desc":"Depth Contour",
+	   "line":true,
+	   "point":false
+	},
+	"DSID":{
+	   "area":false,
+	   "desc":"Data Set Identification",
+	   "line":false,
+	   "point":false
+	},
+	"EXEZNE":{
+	   "area":true,
+	   "desc":"exclusive economic zone area",
+	   "line":false,
+	   "point":false
+	},
+	"LIGHTS":{
+	   "area":false,
+	   "desc":"Lights points",
+	   "line":false,
+	   "point":true
+	},
+	"LNDARE":{
+	   "area":true,
+	   "desc":"Land Area",
+	   "line":true,
+	   "point":true
+	},
+	"LNDMRK":{
+	   "area":true,
+	   "desc":"Land mark",
+	   "line":true,
+	   "point":true
+	},
+	"LNDRGN":{
+	   "area":true,
+	   "desc":"Land Region",
+	   "line":false,
+	   "point":true
+	},
+	"MAGVAR":{
+	   "area":true,
+	   "desc":"Magnetic variation",
+	   "line":true,
+	   "point":true
+	},
+	"M_COVR":{
+	   "area":true,
+	   "desc":"Meta coverage area",
+	   "line":false,
+	   "point":false
+	},
+	"M_NPUB":{
+	   "area":true,
+	   "desc":"Meta Nautical publication information",
+	   "line":false,
+	   "point":false
+	},
+	"M_NSYS":{
+	   "area":true,
+	   "desc":"Meta Navigational system of marks",
+	   "line":false,
+	   "point":false
+	},
+	"M_QUAL":{
+	   "area":true,
+	   "desc":"Meta Quality of data",
+	   "line":false,
+	   "point":false
+	},
+	"M_VDAT":{
+	   "area":true,
+	   "desc":"Meta Vertical datum",
+	   "line":false,
+	   "point":false
+	},
+	"NAVLNE":{
+	   "area":false,
+	   "desc":"Navigation line",
+	   "line":true,
+	   "point":false
+	},
+	"OBSTRN":{
+	   "area":true,
+	   "desc":"Obstructions",
+	   "line":true,
+	   "point":true
+	},
+	"PILBOP":{
+	   "area":true,
+	   "desc":"Pilot boarding place",
+	   "line":false,
+	   "point":true
+	},
+	"PRCARE":{
+	   "area":true,
+	   "desc":"Precautionary area",
+	   "line":false,
+	   "point":true
+	},
+	"RCRTCL":{
+	   "area":false,
+	   "desc":"Recommended route centreline",
+	   "line":true,
+	   "point":false
+	},
+	"RDOCAL":{
+	   "area":false,
+	   "desc":"Radio calling-in point",
+	   "line":true,
+	   "point":true
+	},
+	"RECTRC":{
+	   "area":true,
+	   "desc":"Recommended track",
+	   "line":true,
+	   "point":false
+	},
+	"RTPBCN":{
+	   "area":false,
+	   "desc":"Radar transponder beacon",
+	   "line":false,
+	   "point":true
+	},
+	"SBDARE":{
+	   "area":true,
+	   "desc":"Seabed area",
+	   "line":true,
+	   "point":true
+	},
+	"SEAARE":{
+	   "area":true,
+	   "desc":"Sea area",
+	   "line":false,
+	   "point":true
+	},
+	"SOUNDG":{
+	   "area":false,
+	   "desc":"Sounding",
+	   "line":false,
+	   "point":true
+	},
+	"STSLNE":{
+	   "area":false,
+	   "desc":"Straight Territorial Sea Baseline",
+	   "line":true,
+	   "point":false
+	},
+	"TESARE":{
+	   "area":true,
+	   "desc":"Territorial Sea area",
+	   "line":false,
+	   "point":false
+	},
+	"TOPMAR":{
+	   "area":false,
+	   "desc":"Topmark",
+	   "line":false,
+	   "point":true
+	},
+	"UWTROC":{
+	   "area":false,
+	   "desc":"Underwater / awash rock",
+	   "line":false,
+	   "point":true
+	},
+	"WRECKS":{
+	   "area":true,
+	   "desc":"Wreckage",
+	   "line":false,
+	   "point":true
+	},
+	"BCNSPP":{
+	   "area":false,
+	   "desc":"Special purpose beacon",
+	   "line":false,
+	   "point":true
+	},
+	"BRIDGE":{
+	   "area":true,
+	   "desc":"Bridge",
+	   "line":true,
+	   "point":true
+	},
+	"BUISGL":{
+	   "area":true,
+	   "desc":"Building Single",
+	   "line":false,
+	   "point":true
+	},
+	"BUAARE":{
+	   "area":true,
+	   "desc":"Built-up area",
+	   "line":false,
+	   "point":true
+	}
+ }

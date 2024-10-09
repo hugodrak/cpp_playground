@@ -14,6 +14,30 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
 np.random.seed(0)
 
+import logging
+
+# Create a custom logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)  # Set the overall logger level
+
+# Create handlers
+file_handler = logging.FileHandler('debug.log')
+file_handler.setLevel(logging.DEBUG)
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+
+# Create formatters and add them to the handlers
+file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(file_formatter)
+
+console_formatter = logging.Formatter('%(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+
+# Add the handlers to the logger
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
 
 def guess_msgtype(path: Path) -> str:
 	"""Guess message type name from path."""
@@ -79,7 +103,7 @@ class Plotter:
 		self.subplots = len(algos)
 		self.algos = algos
 		# self.trackers = [HDTracker(), HDTracker()]
-		self.trackers = [HDTracker()]
+		self.trackers = [HDTracker(logger)]
 		if out_dir and not os.path.exists(out_dir):
 			os.makedirs(out_dir)
 		self.out_dir = out_dir
@@ -114,9 +138,11 @@ class Plotter:
 			axs[i][1].set_xticklabels(np.round(x_ticks, decimals=1), rotation=45, ha='right')  # Set x tick labels at 45-degree downward angle
 			axs[i][1].set_yticks(np.round(y_ticks, decimals=1))
 			axs[i][1].set_xlabel('X axis')
-			axs[i][1].set_ylabel('Y axis')
-			axs[i][1].set_xlim(-self.r, self.r)
-			axs[i][1].set_ylim(-self.r, self.r)
+			# axs[i][1].set_ylabel('Y axis')
+			# axs[i][1].set_xlim(-self.r, self.r)
+			# axs[i][1].set_ylim(-self.r, self.r)
+			axs[i][1].set_xlim(-50, 50)
+			axs[i][1].set_ylim(-50, 50)
 
 		# run clustering
 		for i, algo in enumerate(self.algos):
@@ -146,7 +172,7 @@ class Plotter:
 
 			# run tracking
 			if run_tracking:
-				if t == "10_14_38":
+				if t == "10_14_39":
 					d=0
 				# convert df to class object
 				new_objects = []
@@ -157,16 +183,16 @@ class Plotter:
 				self.trackers[i].create_tracked_object(new_objects, timestamp)
 
 				# upadate object positions
-				self.trackers[i].estimate_object_position()
+				self.trackers[i].estimate_object_position() # TODO: update age
 
 				# then match objects
-				self.trackers[i].match_objects(new_objects)
+				self.trackers[i].match_objects(new_objects, timestamp)
 
 				# Plot tracked objects
 				for obj in self.trackers[i].all_tracked_objects:
 					# TODO: print heading arrow and fufutre track
-					# if obj.status == 1:
-					if True:
+					if obj.status == 1: # confirmed
+					#if True:
 						# axs[i][1].scatter(obj.xpos, obj.ypos, color='red', linewidth=1)
 						# axs[i][1].text(obj.xpos, obj.ypos, obj.id, fontsize=7, color='black', ha='center',
 						# 		va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.1'))
@@ -181,29 +207,38 @@ class Plotter:
 											obj.tly - obj.bry, linewidth=1, edgecolor=edge_color, facecolor='none')
 						axs[i][1].add_patch(rect)
 
-						dx = obj.est_vel * np.cos(-obj.est_heading+np.pi/2.0) * 20
-						dy =  obj.est_vel * np.sin(-obj.est_heading+np.pi/2.0) * 20
 
-						# Plotting the arrow
-						axs[i][1].arrow(obj.xpos, obj.ypos, dx, dy, head_width=1, head_length=1, fc='black', ec='black')
+						if obj.has_future and obj.classification == 2: # moving
+							# dx = obj.x_centre_future[0]-obj.x_centre
+							# dy = obj.y_centre_future[0]-obj.y_centre
 
-
-						#axs[i][1].plot(obj.xpos_future, obj.ypos_future, color="cyan")
-
-						for bi in range(5):
-							rect = patches.Rectangle((obj.tlx_future[bi], obj.bry_future[bi]), obj.brx_future[bi] - obj.tlx_future[bi],
-											obj.tly_future[bi] - obj.bry_future[bi], linewidth=1, edgecolor="grey", facecolor='none')
-							axs[i][1].add_patch(rect)
+							# Plotting the arrow
+							# axs[i][1].arrow(obj.x_centre, obj.y_centre, dx, dy, head_width=1, head_length=1, fc='black', ec='black')
 
 
-		plt.tight_layout()
+							#axs[i][1].plot(obj.xpos_future, obj.ypos_future, color="cyan")
+							line_xs, line_ys = [obj.x_centre], [obj.y_centre]
+							for bi in range(5):
+								rect = patches.Rectangle((obj.tlx_future[bi], obj.bry_future[bi]), obj.brx_future[bi] - obj.tlx_future[bi],
+												obj.tly_future[bi] - obj.bry_future[bi], linewidth=1, edgecolor="grey", facecolor='none')
+								axs[i][1].add_patch(rect)
+								axs[i][1].text(obj.x_centre_future[bi], obj.y_centre_future[bi], str(obj.id), fontsize=7, color='black', ha='center',
+									va='center', bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.1'))
+								line_xs.append(obj.x_centre_future[bi])
+								line_ys.append(obj.y_centre_future[bi])
+							
+							axs[i][1].plot(line_xs, line_ys, 'b-')
+							axs[i][1].plot(line_xs, line_ys, 'ro', markersize=4)
+
+
+		# plt.tight_layout(pad=2.0)
 
 		if not self.out_dir:
 			plt.show()
 		else:
 			file_path = os.path.join(self.out_dir, f'{t}.png')
 			plt.savefig(file_path)
-			print(f"Saved: {t}.png")
+			logger.info(f"Saved: {t}.png")
 			plt.close()
 
 
@@ -218,8 +253,8 @@ def iterate_times(logpath):
 	
 	# db
 	# eps = 2
-	eps = 0.2 # radius im meters for neighbouring points
-	min_samples = 40
+	eps = 0.1 # radius im meters for neighbouring points
+	min_samples = 500
 	N = 15000 # used to be 30000
 
 	# df = df[(df['x'] >= -9.3) & (df['x'] < 1.9) & (df['y'] >= 20.4) & (df['y'] < 35.2)]  #
@@ -229,7 +264,7 @@ def iterate_times(logpath):
 	basename = os.path.basename(logpath)
 	out_fold = '/Users/hugodrak/Documents/chalmers/1_kandarb_EENX16/CASE/cpp_playground/compare/out'
 	out_dir = os.path.join(out_fold, basename)
-	print("storing logs in:", out_dir)
+	logger.info(f"storing logs in: {out_dir}")
 	ts = load_msg_defs()
 	# algos = [GridScanDF(gridsize, r, c, d, min_points), DBSCANDF(eps=eps, min_samples=min_samples)]
 	algos = [DBSCANDF(eps=eps, min_samples=min_samples)]
@@ -237,15 +272,19 @@ def iterate_times(logpath):
 	plotter = Plotter(r, gridsize, algos=algos, out_dir=out_dir)
 	t = 0
 	prev_r = 50
-	frame_start = 68+11
-	frame_end = 85
+	# frame_start = 68+11
+	# frame_start = 70
+	frame_start = 10
+	# frame_end = 85
+	# frame_end = 100
+	frame_end = 10000
 	frame_counter = 0
-	print("running reader")
+	logger.info("running reader")
 	# 10_14_25 to 10_14_42
 	# TODO: future track from heading and vel for those with positive vel
 
 	with AnyReader([Path(logpath)], default_typestore=ts) as reader:
-		#print_meta(reader)
+		print_meta(reader)
 		connections = [x for x in reader.connections if x.topic == TOPIC]
 		# for connection, timestamp, rawdata in tqdm.tqdm(reader.messages(connections=connections)):
 		for connection, timestamp, rawdata in reader.messages(connections=connections):
@@ -257,25 +296,29 @@ def iterate_times(logpath):
 			frame_counter += 1
 			msg = reader.deserialize(rawdata, connection.msgtype)
 			rng = msg.detection_range
-			
-			
+
 
 			if rng != prev_r:
-				print("range changed to:", rng)
+				logger.warning(f"range changed to: {rng}")
 				r = rng
 				plotter.r = r
 				algos[0] = GridScanDF(gridsize, r, c, d, min_points)
 				prev_r = rng
 
-			df = pd.DataFrame({"time": t, "x": msg.x_indices, "y": msg.y_indices, "intens": msg.intensities})
-			df = df[(df["x"] > -1.5) & (df["x"] < 16.0) & (df["y"] > -36.0) & (df["y"] < -7.5)]
+			df = pd.DataFrame({"time": t, "x": msg.x_indices, "y": msg.y_indices, "intens": msg.intensities, "ranges": msg.ranges})
+			# df = df[(df["x"] > -1.5) & (df["x"] < 16.0) & (df["y"] > -36.0) & (df["y"] < -7.5)]
+			
+			# df = df[(df["x"] > -3.5) & (df["x"] < 20.0) & (df["y"] > -40.0) & (df["y"] < -1.5)]
 
 			t_string = (pd.to_datetime(timestamp, unit='ns') + pd.Timedelta(hours=1)).strftime('%H_%M_%S')
 			# print(t_string)
-			print("points in df:", len(df))
+			logger.info(f"points in df: {len(df)}")
 			if len(df) > N:
 				# TODO: please do not sample uniformly, more towards the centre and less at the end!
-				sdf = df.sample(n=N)
+				#sdf = df.sample(n=N)
+				# sdf = df.sample(n=N, weights=(df['x']**2 + df['y']**2))
+				sdf = df.sample(n=N, weights="ranges")
+
 			else:
 				sdf = df
 			plotter.plot(sdf, t=t_string, timestamp=timestamp)

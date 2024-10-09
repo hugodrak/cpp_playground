@@ -1,0 +1,1 @@
+Geo object: Magnetic variation (MAGVAR) (P,L,A)

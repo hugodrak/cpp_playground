@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boat Heading and Object Detection</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        .slider:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+<input type="range" min="0" max="360" value="0" class="slider" id="headingSlider">
+<p>Heading: <span id="headingValue">0</span>°</p>
+<p>Detected Object at (Lat, Lon): <span id="objectCoords">Calculating...</span></p>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var initialLat = 58.5128; // Initial Latitude
+    var initialLon = 11.5060; // Initial Longitude
+
+    var map = L.map('map').setView([initialLat, initialLon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var boatMarker = L.marker([initialLat, initialLon]).addTo(map);
+    boatMarker.bindPopup("Boat").openPopup();
+
+    var objectMarker; // Marker for the detected object
+    var objectLatLon = calculateObjectPosition(initialLat, initialLon, 0, 0); // Initial object position
+
+	function calculateObjectPosition(lat, lon, dx, dy, heading) {
+		// Convert heading to radians
+		var headingRad = heading * Math.PI / 180;
+
+		// compensated x and y
+		var cx = dx * Math.cos(headingRad) + dy * Math.sin(headingRad);
+		var cy = -dx * Math.sin(headingRad) + dy * Math.cos(headingRad);
+
+		// Approximate conversion from meters to decimal degrees
+		var ky = 111319; // 1 deg latitude in meters
+		var kx = Math.cos(Math.PI * lat / 180.0) * ky;
+
+		// Calculate new position based on heading
+		var newLat = lat + (cy / ky);
+		var newLon = lon + (cx / kx);
+
+		return { lat: newLat, lon: newLon };
+	}
+    
+
+    function updateObjectPosition(heading) {
+        if (objectMarker) {
+            map.removeLayer(objectMarker);
+        }
+        var dx = 500; // Example object position 50 meters to the right
+        var dy = 500; // 50 meters in front
+        // Adjust dx, dy based on heading if needed
+        var newPos = calculateObjectPosition(initialLat, initialLon, dx, dy, heading);
+        objectMarker = L.marker([newPos.lat, newPos.lon]).addTo(map);
+        objectMarker.bindPopup("Detected Object").openPopup();
+        document.getElementById('objectCoords').innerText = newPos.lat.toFixed(5) + ", " + newPos.lon.toFixed(5);
+    }
+
+    document.getElementById('headingSlider').oninput = function() {
+        document.getElementById('headingValue').innerText = this.value;
+        updateObjectPosition(parseInt(this.value));
+    }
+
+    updateObjectPosition(0); // Initialize with 0 heading
+</script>
+</body>
+</html>
